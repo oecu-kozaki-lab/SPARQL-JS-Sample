@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
+
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.css" />
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.ie.css" />
+    <![endif]-->
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js"></script>
+
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/sparql.js" charset="UTF-8"></script>
+<script type="text/javascript" src="js/getLODdbp.js" charset="UTF-8"></script>
+<script type="text/javascript" src="js/showOSM.js" charset="UTF-8"></script>
+<script src="http://openlayers.org/api/OpenLayers.js"></script>
+
+
+<!--
+ <style type="text/css">
+#body {
+    padding: 0;
+    margin: 0;
+}
+#html, #body, #Map {
+    height: 100%;
+}
+</style> -->
+ <style type="text/css">
+#body {
+    padding: 1;
+    margin: 1;
+   line-height: 1.1em
+}
+#container{
+    padding: 1;
+    margin: 1;
+   line-height: 1.2em
+}
+#Map {
+        height: 500px;
+        width: 500px;
+    }
+#Map2 {
+        height: 500px;
+        width: 500px;
+    }
+#Map3 {
+        height: 500px;
+        width: 500px;
+    }
+#html, #body {
+    height: 100%;
+}
+</style>
+
+</head>
+<body>
+
+
+<div id="container">
+<div id="background"></div>
+
+<!-- 結果ペイン -->
+<h1>Wikidataの地理情報（大阪市内）の可視化サンプル</h1>
+<hr>
+<div id="Map"></div>
+<div id="result_div" class="table_parent">
+
+<!--
+<div id="result_div2"></div>
+-->
+</div>
+<hr>
+
+</body>
+</html>
