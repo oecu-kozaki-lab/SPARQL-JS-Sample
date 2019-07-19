@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<script src="sparql.js" defer></script>
+	<link rel="stylesheet" href="style.css">
+	<title>SPARQL Sample</title>
+</head>
+
+<body>
+	<header>
+		<h1>SPARQLによるQAサンプル(1)</h2>
+	</header>
+
+	<div class="container">
+		<div class="center-item">
+			<label>映画名：<input type="text" id="film" size="20" value="君の名は。">の監督は？</label>
+		</div>
+		<div class="center-item" >
+			<textarea id="query_area" cols="60" rows="10">
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
+select DISTINCT ?s ?sLabel ?o ?oLabel
+{ 
+  ?s wdt:P31/wdt:P279* wd:Q11424 .
+  ?s rdfs:label "#FILM#"@ja.
+  ?s wdt:P57 ?o.
+SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],ja,en". }
+}
+LIMIT 100
+</textarea>
+		</div>
+		<div class="center-item">
+			<button id="send">Query</button>
+		</div>
+	</div>
+
+	<!-- 結果ペイン -->
+	<div id="result_div" class="container"></div>
+</body>
+
+</html>
