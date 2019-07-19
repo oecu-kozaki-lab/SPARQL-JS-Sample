@@ -6,3 +6,23 @@
 
 
 今後，徐々に増やしていく予定です．
+
+## SPARQL-JS-Sample
+ES2017/HTML5準拠でライブラリを使わずにSPARQLを処理するサンプル
+実行例　https://oecu-kozaki-lab.github.io/SPARQL-JS-Sample/simpleSPARQL-modern/simple_sparql.html
+
+## simpleQA
+入力した文字列に応じてSPARQLを生成する，簡易QA処理のサンプル
+実行例　https://oecu-kozaki-lab.github.io/SPARQL-JS-Sample/simpleQA/simple_sparql.html
+
+## simpleQA
+入力した文字列に応じてSPARQLを生成する，簡易QA処理のサンプル
+実行例　https://oecu-kozaki-lab.github.io/SPARQL-JS-Sample/simpleQA/simple_sparql.html
+
+
+
+
+
+
+
+
