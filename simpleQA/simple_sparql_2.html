@@ -12,12 +12,12 @@
 
 <body>
 	<header>
-		<h1>SPARQLによるQAサンプル(1)</h2>
+		<h1>SPARQLによるQAサンプル(2)</h2>
 	</header>
 
 	<div class="container">
 		<div class="center-item">
-			<label>映画名：<input type="text" id="INPUT" size="20" value="君の名は。">の監督は？</label>
+			<label>映画名：<input type="text" id="INPUT" size="20" value="君の名は。">の監督は？（部分一致OK）</label>
 		</div>
 		<div class="center-item" >
 			<textarea id="query_area" cols="60" rows="10">
@@ -28,7 +28,8 @@ PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 select DISTINCT ?s ?sLabel ?o ?oLabel
 { 
   ?s wdt:P31/wdt:P279* wd:Q11424 .
-  ?s rdfs:label "#INPUT#"@ja.
+  ?s rdfs:label ?title.
+  FILTER(regex( str(?title),"#INPUT#")) 
   ?s wdt:P57 ?o.
 SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],ja,en". }
 }

@@ -12,11 +12,11 @@ textArea.hidden;
 	//textArea.value = defaultQuery;
 	//textArea.replace( '#FILM#', textFILM );
 	sendButton.addEventListener('click', async () => {
-		const textFILM = document.getElementById('film').value;
+		const textINPUT = document.getElementById('INPUT').value;
 	
 		removeAllChild(resultArea);
 		const query = textArea.value
-			.replace( '#FILM#', textFILM )
+			.replace( '#INPUT#', textINPUT )
 			.trim()
 			.replace(/^\s+/g, '')
 			.replace(/\s+$/g, '')
