@@ -23,6 +23,8 @@ textArea.hidden;
 	
 		removeAllChild(resultArea);
 		const query = textArea.value
+			.replace( 'where', ' where' )
+			.replace( 'Where', ' where' )
 			.replace( '#INPUT#', textINPUT )
 			.replace( '#PROP#', textPROP )
 			.trim()
@@ -47,9 +49,12 @@ textArea.hidden;
 			var mesText = "" ;
 			while(i < len){
 				var p = document.createElement('p');
-				p.textContent = data[i]['oLabel'].value;
+				if(data[i]['oLabel']!=null){
+					p.textContent = data[i]['oLabel'].value;
+					mes.appendChild( p );
+				}
 				i++;
-				mes.appendChild( p );
+				
 			}
 			var p_end = document.createElement('p');
 			p_end.textContent = 'です．';
