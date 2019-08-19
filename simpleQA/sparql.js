@@ -13,7 +13,10 @@ textArea.hidden;
 	//textArea.replace( '#FILM#', textFILM );
 	sendButton.addEventListener('click', async () => {
 		const textINPUT = document.getElementById('INPUT').value;
-		const textPROP = document.getElementById('propList').value;
+		var textPROP ="";
+		if(document.getElementById('propList')!=null){
+			textPROP = document.getElementById('propList').value;
+			}
 //		const endpoint = document.getElementById('endpoint').value;
 		//alert(endpoint+'--'+textINPUT);
 	
