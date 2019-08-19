@@ -11,7 +11,7 @@ header > h1 {
 .container {
     margin: 1em;
     padding: 0;
-    text-align: center;
+    text-align: left;
 }
 
 #query_area {
