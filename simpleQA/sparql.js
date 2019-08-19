@@ -13,6 +13,7 @@ textArea.hidden;
 	//textArea.replace( '#FILM#', textFILM );
 	sendButton.addEventListener('click', async () => {
 		const textINPUT = document.getElementById('INPUT').value;
+		const textPROP = document.getElementById('propList').value;
 //		const endpoint = document.getElementById('endpoint').value;
 		//alert(endpoint+'--'+textINPUT);
 	
@@ -20,6 +21,7 @@ textArea.hidden;
 		removeAllChild(resultArea);
 		const query = textArea.value
 			.replace( '#INPUT#', textINPUT )
+			.replace( '#PROP#', textPROP )
 			.trim()
 			.replace(/^\s+/g, '')
 			.replace(/\s+$/g, '')
