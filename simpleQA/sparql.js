@@ -37,8 +37,20 @@ textArea.hidden;
 			const vars = resultData.head.vars;
 			const data = resultData.results.bindings
 
+		//結果を複数表示したいときにも対応
 			const mes = document.createElement('div');
-			mes.textContent = data[0]['oLabel'].value + 'です．';
+			var i=0;
+			var len = data.length;
+			var mesText = "" ;
+			while(i < len){
+				var p = document.createElement('p');
+				p.textContent = data[i]['oLabel'].value;
+				i++;
+				mes.appendChild( p );
+			}
+			var p_end = document.createElement('p');
+			p_end.textContent = 'です．';
+			mes.appendChild( p_end );
 			resultArea.appendChild(mes);
 /*
 			const headers = tableHead(vars);
