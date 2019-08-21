@@ -8,9 +8,8 @@
 <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
 
+	<script src="parseText.js" defer></script>
 	<script src="sparql.js" defer></script>
-	
-	
 	
 	<script src="suggest.js"></script>
 	    <script src="con_list.js"></script>
@@ -64,7 +63,7 @@
 
 <body>
 	<header>
-		<h1>SPARQLによるQAサンプル(4)</h2>
+		<h1>SPARQLによるQAサンプル(5)</h2>
 	</header>
 
 	<div class="container">
@@ -100,15 +99,14 @@
 
 		<div class="center-item" >
 			<textarea id="query_area" cols="60" rows="10">
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-PREFIX wd: <http://www.wikidata.org/entity/>
-PREFIX wdt: <http://www.wikidata.org/prop/direct/>
-
 select DISTINCT ?s ?sLabel ?o ?oLabel
 { 
   ?s wdt:P31/wdt:P279* wd:Q11424 .
   ?s rdfs:label"#INPUT#"@ja. 
-  ?s #PROP# ?o.
+  ?s ?p ?o.
+  ?prop wikibase:directClaim  ?p . 
+  ?prop rdfs:label "#PROP#"@ja.
+
 SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],ja,en". }
 }
 </textarea>

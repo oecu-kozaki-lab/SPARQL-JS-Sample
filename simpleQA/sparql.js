@@ -12,10 +12,7 @@ textArea.hidden;
 	//textArea.value = defaultQuery;
 	//textArea.replace( '#FILM#', textFILM );
 	sendButton.addEventListener('click', async () => {
-		const queryTEXT = document.getElementById('queryText').value;
-		parseText(queryTEXT);
-		
-		const textINPUT = document.getElementById('INPUT').value;
+		var textINPUT = document.getElementById('INPUT').value;
 		var textPROP ="";
 		if(document.getElementById('propList')!=null){
 			textPROP = document.getElementById('propList').value;
@@ -23,7 +20,14 @@ textArea.hidden;
 //		const endpoint = document.getElementById('endpoint').value;
 		//alert(endpoint+'--'+textINPUT);
 	
-	
+		//テキスト文でのクエリ入力の解析ができたら，そちらを優先
+		const queryTEXT = document.getElementById('queryText').value;
+		var queryToken = parseText(queryTEXT);
+		if(queryToken != null){
+			textINPUT = queryToken.subj;
+			textPROP  = queryToken.prop;
+		}
+			
 		removeAllChild(resultArea);
 		const query = textArea.value
 			.replace( 'where', ' where' )
