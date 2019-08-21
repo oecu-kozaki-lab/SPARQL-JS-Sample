@@ -12,6 +12,9 @@ textArea.hidden;
 	//textArea.value = defaultQuery;
 	//textArea.replace( '#FILM#', textFILM );
 	sendButton.addEventListener('click', async () => {
+		const queryTEXT = document.getElementById('queryText').value;
+		parseText(queryTEXT);
+		
 		const textINPUT = document.getElementById('INPUT').value;
 		var textPROP ="";
 		if(document.getElementById('propList')!=null){
