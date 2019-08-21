@@ -68,7 +68,8 @@
 
 	<div class="container">
 	<div style="margin-top:4px;">
-			<label>テキスト：<input type="text" id="queryText" size="80" value="君の名は。の監督は？"></label>
+			<label>質問文：<input type="text" id="queryText" size="80" value="君の名は。の監督は？"></label><br>
+			<hr>
             映画：<input id="INPUT" type="text" name="pattern" value="" autocomplete="off" size="80" style="display: block"/>
             <!-- 補完候補を表示するエリア -->
             <div id="suggest" style="display:none;"></div>
@@ -101,7 +102,6 @@
 			<textarea id="query_area" cols="60" rows="10">
 select DISTINCT ?s ?sLabel ?o ?oLabel
 { 
-  ?s wdt:P31/wdt:P279* wd:Q11424 .
   ?s rdfs:label"#INPUT#"@ja. 
   ?s ?p ?o.
   ?prop wikibase:directClaim  ?p . 
