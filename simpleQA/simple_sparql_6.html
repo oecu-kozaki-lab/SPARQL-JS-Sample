@@ -5,8 +5,6 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
 
 	<script src="parseText.js" defer></script>
 	<script src="sparql6.js" defer></script>
@@ -23,8 +21,8 @@ function dispLoading(msg){
  // 画面表示メッセージ
  var dispMsg = "<div class='loadingMsg'>" + msg + "</div>";
  // ローディング画像が表示されていない場合のみ出力
- if(document.getElementById("loading") == null){
- $("body").append("<div id='loading'>" + dispMsg + "</div>");
+ if(document.getElementById('loading') == null){
+ document.body.append("<div id='loading'>" + dispMsg + "</div>");
  }
 }
  
@@ -32,7 +30,9 @@ function dispLoading(msg){
  Loading イメージ削除関数
  ------------------------------ */
 function removeLoading(){
- document.getElementById("loading").remove();
+if(document.getElementById('loading') != null){
+ document.getElementById('loading').remove();
+ }
 }
 </script>
 	
