@@ -20,9 +20,7 @@ ES2017/HTML5準拠でライブラリを使わずにSPARQLを処理するサン�
 実行例　https://oecu-kozaki-lab.github.io/SPARQL-JS-Sample/simpleQA/simple_sparql_2.html
 
 
-## 自然言語文による簡易質問応答システム
-自然言語文で入力した質問に応じてSPARQLを生成し，Wikidataからを検索して回答する簡易QA処理のサンプル 
-実行例　https://oecu-kozaki-lab.github.io/SPARQL-JS-Sample/simpleQA/simple_sparql_6.html
+
 
 
 
