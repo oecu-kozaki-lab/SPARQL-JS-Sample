@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+	<script src="parseText.js" defer></script>
+	<script src="sparql6.js" defer></script>
+	
+	<script src="suggest.js"></script>
+	    <script src="con_list.js"></script>
+	    <script>
+	      <!--
+	      // wondowのonloadイベントでSuggestを生成
+	      // (listは、list.js内で定義している)
+	      var start = function(){new Suggest.Local("INPUT", "suggest", list, {dispMax: 30, highlight: true});};
+	      window.addEventListener ?
+	        window.addEventListener('load', start, false) :
+	        window.attachEvent('onload', start);
+	        //-->
+	    </script>
+
+<script>
+/* ------------------------------
+ Loading イメージ表示関数
+ ------------------------------ */
+function dispLoading(msg){
+ // 引数なし（メッセージなし）を許容
+ if( msg == undefined ){
+ msg = "";
+ }
+ // 画面表示メッセージ
+ var dispMsg = "<div class='loadingMsg'>" + msg + "</div>";
+ // ローディング画像が表示されていない場合のみ出力
+ if(document.getElementById("loading") == null){
+ document.body.insertAdjacentHTML('afterbegin',"<div id='loading'>" + dispMsg + "</div>");
+ }
+}
+ 
+/* ------------------------------
+ Loading イメージ削除関数
+ ------------------------------ */
+function removeLoading(){
+ document.getElementById("loading").remove();
+}
+</script>
+
+	<style type="text/css">
+	      <!--
+	        #suggest {
+			  margin: 10px auto;position: absolute;
+			  background-color: #FFFFFF;
+			  border: 1px solid #CCCCFF;
+			  width: 400px;
+			  height:200px;
+			  overflow: auto;
+			}
+	        #suggest div {
+	          margin: 10px auto;
+		  padding: 1px;
+	          display: block;
+	          width: 400px;
+	          overflow: hidden;
+	          white-space: nowrap;
+	        }
+	        #suggest div.select{
+	          color: #FFFFFF;
+	          background-color: #3366FF;
+	        }
+	        #suggest div.over{
+	          background-color: #99CCFF;
+	        }
+	        #suggest strong{
+	          font-weight: bold;
+	        }
+	        -->
+    </style>
+	
+		<style>
+ #loading {
+ display: table;
+ width: 100%;
+ height: 100%;
+ position: fixed;
+ top: 0;
+ left: 0;
+ background-color: #fff;
+ opacity: 0.8;
+}
+ 
+#loading .loadingMsg {
+ display: table-cell;
+ text-align: center;
+ vertical-align: middle;
+ padding-top: 140px;
+ background: url("image/load-earth.gif") center center no-repeat;
+}
+	</style>
+	
+	
+	<link rel="stylesheet" href="style.css">
+	<title>SPARQL Sample</title>
+</head>
+
+<body>
+	<header>
+		<h1>SPARQLによるQAサンプル(5)</h1>
+	</header>
+
+	<div class="container">
+	<div style="margin-top:4px;">
+			<label>質問文：<input type="text" id="queryText" size="80" value="君の名は。の監督は？"></label><br>
+			<hr>
+            映画：<input id="INPUT" type="text" name="pattern" value="" autocomplete="off" size="80" style="display: block"/>
+            <!-- 補完候補を表示するエリア -->
+            <div id="suggest" style="display:none;"></div>
+            の
+	         <select id="propList">
+				<option value="wdt:P57">監督</option>
+				<option value="wdt:P58">脚本</option>
+				<option value="wdt:P136">ジャンル</option>
+				<option value="wdt:P31">分類</option>
+				<option value="wdt:P86">作曲</option>
+				<option value="wdt:P154">ロゴ画像</option>
+				<option value="wdt:P272">制作会社</option>
+				<option value="wdt:P344">撮影監督</option>
+				<option value="wdt:P444">レビュー・スコア</option>
+				<option value="wdt:P373">コモンズのカテゴリ</option>
+				<option value="wdt:P577">出版日</option>
+				<option value="wdt:P495">本国</option>
+				<option value="wdt:P725">声優</option>
+				<option value="wdt:P750">配給元</option>
+				<option value="wdt:P856">公式ウェブサイト</option>
+				<option value="wdt:P840">物語の舞台</option>
+				<option value="wdt:P2047">継続時間</option>
+				<option value="wdt:P2142">興行収入</option>
+				<option value="wdt:P2756">映倫区分</option>
+			</select>
+            は？
+           </div>
+
+		<div class="center-item" >
+			<textarea id="query_area" cols="60" rows="10">
+select DISTINCT ?s ?sLabel ?o ?oLabel
+{ 
+  ?s rdfs:label"#INPUT#"@ja. 
+  ?s ?p ?o.
+  ?prop wikibase:directClaim  ?p . 
+  ?prop rdfs:label "#PROP#"@ja.
+
+SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],ja,en". }
+}
+</textarea>
+		</div>
+		<div class="center-item">
+			<button id="send">Query</button>
+		</div>
+	</div>
+
+	<!-- 結果ペイン -->
+	<div id="result_div" class="container"></div>
+</body>
+
+</html>
