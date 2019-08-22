@@ -5,13 +5,24 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
 
 	<script src="parseText.js" defer></script>
 	<script src="sparql6.js" defer></script>
+	
+	<script src="suggest.js"></script>
+	    <script src="con_list.js"></script>
+	    <script>
+	      <!--
+	      // wondowのonloadイベントでSuggestを生成
+	      // (listは、list.js内で定義している)
+	      var start = function(){new Suggest.Local("INPUT", "suggest", list, {dispMax: 30, highlight: true});};
+	      window.addEventListener ?
+	        window.addEventListener('load', start, false) :
+	        window.attachEvent('onload', start);
+	        //-->
+	    </script>
 
-	<script>
+<script>
 /* ------------------------------
  Loading イメージ表示関数
  ------------------------------ */
@@ -24,7 +35,7 @@ function dispLoading(msg){
  var dispMsg = "<div class='loadingMsg'>" + msg + "</div>";
  // ローディング画像が表示されていない場合のみ出力
  if(document.getElementById("loading") == null){
- $("body").append("<div id='loading'>" + dispMsg + "</div>");
+ document.body.insertAdjacentHTML('afterbegin',"<div id='loading'>" + dispMsg + "</div>");
  }
 }
  
@@ -35,21 +46,43 @@ function removeLoading(){
  document.getElementById("loading").remove();
 }
 </script>
+<style>
+	 #loading {
+	 display: table;
+	 width: 100%;
+	 height: 100%;
+	 position: fixed;
+	 top: 0;
+	 left: 0;
+	 background-color: #fff;
+	 opacity: 0.8;
+	}
+	 
+	#loading .loadingMsg {
+	 display: table-cell;
+	 text-align: center;
+	 vertical-align: middle;
+	 padding-top: 140px;
+	 background: url("image/load-earth.gif") center center no-repeat;
+	}
+</style>
+	
 	
 	<link rel="stylesheet" href="style.css">
-	<title>SPARQL Sample</title>
+	<title>自然言語による質問文への応答</title>
 </head>
 
 <body>
 	<header>
-		<h1>自然言語文による簡易質問システム</h1>
+		<h1>自然言語による質問文への応答</h1>
 	</header>
 
 	<div class="container">
 	<div style="margin-top:4px;">
 			<label>質問文：<input type="text" id="queryText" size="80" value="君の名は。の監督は？"></label>
 			<br>
-			<br>
+			<hr>
+            
 		<div class="center-item" >
 			<textarea style="display:none" id="query_area" cols="60" rows="10">
 select DISTINCT ?s ?sLabel ?o ?oLabel
