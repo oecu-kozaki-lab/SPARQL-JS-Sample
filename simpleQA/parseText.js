@@ -20,7 +20,7 @@ function parseText(text){
 			'prop' :prop
 		}
 		
-		alert('subj:'+token.subj +'\nprop:'+token.prop);
+		console.log('subj:'+token.subj +'\nprop:'+token.prop);
 		
 		return token;
 	}
