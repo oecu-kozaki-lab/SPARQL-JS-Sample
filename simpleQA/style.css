@@ -27,3 +27,22 @@ button#send {
     font-size: 1.5rem;
     background-color: lightblue;
 }
+
+ #loading {
+ display: table;
+ width: 100%;
+ height: 100%;
+ position: fixed;
+ top: 0;
+ left: 0;
+ background-color: #fff;
+ opacity: 0.8;
+}
+ 
+#loading .loadingMsg {
+ display: table-cell;
+ text-align: center;
+ vertical-align: middle;
+ padding-top: 40px;
+ background: url("image/load-earth.gif") center center no-repeat;
+}

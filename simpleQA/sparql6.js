@@ -12,14 +12,9 @@ textArea.hidden;
 	//textArea.value = defaultQuery;
 	//textArea.replace( '#FILM#', textFILM );
 	sendButton.addEventListener('click', async () => {
-		var textINPUT = document.getElementById('INPUT').value;
+		var textINPUT = "";
 		var textPROP ="";
-		if(document.getElementById('propList')!=null){
-			textPROP = document.getElementById('propList').value;
-			}
-//		const endpoint = document.getElementById('endpoint').value;
-		//alert(endpoint+'--'+textINPUT);
-	
+
 		//テキスト文でのクエリ入力の解析ができたら，そちらを優先
 		const queryTEXT = document.getElementById('queryText').value;
 		var queryToken = parseText(queryTEXT);
@@ -40,11 +35,15 @@ textArea.hidden;
 			.replace(/\n/g, '');
 
 		try {
+			
+			dispLoading("処理中");
 			const result = await sendQuery(endpoint, query);
 			if (!result.ok) {
 				resultArea.innerText = "クエリが正しくないか、サーバ側がおかしいみたいです";
 				return;
 			}
+			removeLoading();
+			
 			const resultData = await result.json();	
 			const vars = resultData.head.vars;
 			const data = resultData.results.bindings
