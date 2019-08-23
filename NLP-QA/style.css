@@ -9,6 +9,7 @@ header > h1 {
 }
 
 .container {
+	font-size: 1.5rem;
     margin: 1em;
     padding: 0;
     text-align: left;

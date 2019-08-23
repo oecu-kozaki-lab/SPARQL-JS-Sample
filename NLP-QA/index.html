@@ -78,8 +78,8 @@ function removeLoading(){
 	</header>
 
 	<div class="container">
-	<div style="margin-top:4px;">
-			<label>質問文：<input type="text" id="queryText" size="80" value="君の名は。の監督は？"></label>
+	<div style="margin-top:4px;  font-size: 1.5rem;">
+			<label>質問文：<input type="text" id="queryText" size="80" value="君の名は。の監督は？" style=" font-size: 1.5rem;"></label>
 			<br>
 			<hr>
             
@@ -97,12 +97,21 @@ SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],ja,e
 </textarea>
 		</div>
 		<div class="center-item">
-			<button id="send">Query</button>
+			<button id="send">質問する</button>
 		</div>
 	</div>
 
 	<!-- 結果ペイン -->
 	<div id="result_div" class="container"></div>
+	<hr>
+	<div class="container">
+	<h3>質問文の例</h3>
+	天気の子の声優は？<br>
+	大阪電気通信大学の設日は<br>
+	寝屋川市の人口は<br>
+	ドラゴンクエストのプラットフォームは？<br>
+	スプラトゥーンのプロデューサーは？<br>
+	</div>
 </body>
 
 </html>
