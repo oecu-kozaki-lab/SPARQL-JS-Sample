@@ -19,6 +19,9 @@ ES2017/HTML5準拠でライブラリを使わずにSPARQLを処理するサン�
 入力した文字列に応じてSPARQLを生成する，簡易QA処理のサンプル （部分一致もOK） 
 実行例　https://oecu-kozaki-lab.github.io/SPARQL-JS-Sample/simpleQA/simple_sparql_2.html
 
+## simpleQA
+入力した文字列に応じてSPARQLを生成する，簡易QA処理のサンプル （サジェスト機能付き） 
+実行例　https://oecu-kozaki-lab.github.io/SPARQL-JS-Sample/simpleQA/simple_sparql_4.html
 
 ## 自然言語による質問文への応答
 入力した質問文に応じてSPARQLを生成する，簡易QA処理のサンプル  
