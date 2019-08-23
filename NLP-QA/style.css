@@ -1,0 +1,29 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+header > h1 {
+    margin: 0;
+    background-color: #99cc00;
+}
+
+.container {
+    margin: 1em;
+    padding: 0;
+    text-align: left;
+}
+
+#query_area {
+    resize: none;
+    width: 90vw;
+    height: 30vh;
+    border: solid 1px #ccc;
+}
+
+button#send {
+    border: none;
+    border-radius: 3px;
+    font-size: 1.5rem;
+    background-color: lightblue;
+}
