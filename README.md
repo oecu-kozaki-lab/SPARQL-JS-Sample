@@ -7,6 +7,9 @@
 
 今後，徐々に増やしていく予定です．
 
+## simpleSPARQL
+最も基本的なプログラム．まずは，こちらを参考にして下さい，
+
 ## SPARQL-JS-Sample
 ES2017/HTML5準拠でライブラリを使わずにSPARQLを処理するサンプル  
 実行例　https://oecu-kozaki-lab.github.io/SPARQL-JS-Sample/simpleSPARQL-modern/simple_sparql.html
