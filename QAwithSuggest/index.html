@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+
+	<script src="sparql.js" defer></script>
+	
+	
+	
+	<script src="suggest.js"></script>
+	    <script src="con_list.js"></script>
+	    <script>
+	      <!--
+	      // wondowのonloadイベントでSuggestを生成
+	      // (listは、list.js内で定義している)
+	      var start = function(){new Suggest.Local("INPUT", "suggest", list, {dispMax: 30, highlight: true});};
+	      window.addEventListener ?
+	        window.addEventListener('load', start, false) :
+	        window.attachEvent('onload', start);
+	        //-->
+	    </script>
+
+	<style type="text/css">
+	      <!--
+	        #suggest {
+			  margin: 10px auto;position: absolute;
+			  background-color: #FFFFFF;
+			  border: 1px solid #CCCCFF;
+			  width: 400px;
+			  height:200px;
+			  overflow: auto;
+			}
+	        #suggest div {
+	          margin: 10px auto;
+		  padding: 1px;
+	          display: block;
+	          width: 400px;
+	          overflow: hidden;
+	          white-space: nowrap;
+	        }
+	        #suggest div.select{
+	          color: #FFFFFF;
+	          background-color: #3366FF;
+	        }
+	        #suggest div.over{
+	          background-color: #99CCFF;
+	        }
+	        #suggest strong{
+	          font-weight: bold;
+	        }
+	        -->
+    </style>
+	
+	
+	
+	<link rel="stylesheet" href="style.css">
+	<title>SPARQL Sample</title>
+</head>
+
+<body>
+	<header>
+		<h1>SPARQLによるQAサンプル(4)</h2>
+	</header>
+
+	<div class="container">
+	<div style="margin-top:4px;">
+            映画：<input id="INPUT" type="text" name="pattern" value="" autocomplete="off" size="80" style="display: block"/>
+            <!-- 補完候補を表示するエリア -->
+            <div id="suggest" style="display:none;"></div>
+            の
+	         <select id="propList">
+				<option value="wdt:P57">監督</option>
+				<option value="wdt:P58">脚本</option>
+				<option value="wdt:P136">ジャンル</option>
+				<option value="wdt:P31">分類</option>
+				<option value="wdt:P86">作曲</option>
+				<option value="wdt:P154">ロゴ画像</option>
+				<option value="wdt:P272">制作会社</option>
+				<option value="wdt:P344">撮影監督</option>
+				<option value="wdt:P444">レビュー・スコア</option>
+				<option value="wdt:P373">コモンズのカテゴリ</option>
+				<option value="wdt:P577">出版日</option>
+				<option value="wdt:P495">本国</option>
+				<option value="wdt:P725">声優</option>
+				<option value="wdt:P750">配給元</option>
+				<option value="wdt:P856">公式ウェブサイト</option>
+				<option value="wdt:P840">物語の舞台</option>
+				<option value="wdt:P2047">継続時間</option>
+				<option value="wdt:P2142">興行収入</option>
+				<option value="wdt:P2756">映倫区分</option>
+			</select>
+            は？
+           </div>
+
+		<div class="center-item" >
+			<textarea id="query_area" cols="60" rows="10">
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
+select DISTINCT ?s ?sLabel ?o ?oLabel
+{ 
+  ?s wdt:P31/wdt:P279* wd:Q11424 .
+  ?s rdfs:label"#INPUT#"@ja. 
+  ?s #PROP# ?o.
+SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],ja,en". }
+}
+</textarea>
+		</div>
+		<div class="center-item">
+			<button id="send">Query</button>
+		</div>
+	</div>
+
+	<!-- 結果ペイン -->
+	<div id="result_div" class="container"></div>
+</body>
+
+</html>
