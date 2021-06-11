@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+
+	<script src="sparql.js" defer></script>
+	
+	
+	
+	<script src="suggest.js"></script>
+	    <script src="con_list.js"></script>
+	    <script>
+	      <!--
+	      // wondowのonloadイベントでSuggestを生成
+	      // (listは、list.js内で定義している)
+	      var start = function(){new Suggest.Local("INPUT", "suggest", list, {dispMax: 30, highlight: true});};
+	      window.addEventListener ?
+	        window.addEventListener('load', start, false) :
+	        window.attachEvent('onload', start);
+	        //-->
+	    </script>
+
+	<style type="text/css">
+	      <!--
+	        #suggest {
+			  margin: 10px auto;position: absolute;
+			  background-color: #FFFFFF;
+			  border: 1px solid #CCCCFF;
+			  width: 400px;
+			  height:200px;
+			  overflow: auto;
+			}
+	        #suggest div {
+	          margin: 10px auto;
+		  padding: 1px;
+	          display: block;
+	          width: 400px;
+	          overflow: hidden;
+	          white-space: nowrap;
+	        }
+	        #suggest div.select{
+	          color: #FFFFFF;
+	          background-color: #3366FF;
+	        }
+	        #suggest div.over{
+	          background-color: #99CCFF;
+	        }
+	        #suggest strong{
+	          font-weight: bold;
+	        }
+	        -->
+    </style>
+	
+	
+	
+	<link rel="stylesheet" href="style.css">
+	<title>SPARQL Sample</title>
+</head>
+
+<body>
+	<header>
+		<h1>SPARQLによるQA[サジェスト機能付き]</h1>
+	</header>
+
+	<div class="container">
+	<div style="margin-top:4px;">
+            ライトノベル：<input id="INPUT" type="text" name="pattern" value="" autocomplete="off" size="80" style="display: block"/>
+            <!-- 補完候補を表示するエリア -->
+            <div id="suggest" style="display:none;"></div>
+            の
+	         <select id="propList">
+<option value="wdt:P31">分類</option>
+<option value="wdt:P50">著者</option>
+<option value="wdt:P136">ジャンル</option>
+<option value="wdt:P110">挿絵画家</option>
+<option value="wdt:P407">言語</option>
+<option value="wdt:P361">以下の一部分</option>
+<option value="wdt:P495">本国</option>
+<option value="wdt:P449">放送当初のネットワーク</option>
+<option value="wdt:P437">メディア形態</option>
+<option value="wdt:P162">プロデューサー</option>
+<option value="wdt:P725">声優</option>
+<option value="wdt:P646">Freebase識別子</option>
+<option value="wdt:P577">出版日</option>
+<option value="wdt:P123">発行者</option>
+<option value="wdt:P480">Filmaffinity識別子</option>
+<option value="wdt:P750">配給元</option>
+<option value="wdt:P212">ISBN-13</option>
+<option value="wdt:P400">プラットフォーム</option>
+<option value="wdt:P345">IMDb識別子</option>
+<option value="wdt:P957">ISBN-10</option>
+<option value="wdt:P4110">Crunchyroll ID</option>
+<option value="wdt:P3417">Quora主題識別子</option>
+<option value="wdt:P1476">題名</option>
+<option value="wdt:P175">演者・演奏者・歌手</option>
+<option value="wdt:P856">公式ウェブサイト</option>
+<option value="wdt:P1113">話数</option>
+<option value="wdt:P1433">叢書</option>
+<option value="wdt:P1985">Anime News Networkアニメ識別子</option>
+<option value="wdt:P8731">AniList漫画ID</option>
+<option value="wdt:P4969">派生作品</option>
+<option value="wdt:P2671">グーグル・ナレッジ・グラフ識別子</option>
+<option value="wdt:P17">国</option>
+<option value="wdt:P4087">MyAnimeList漫画ID</option>
+<option value="wdt:P1811">エピソードの一覧</option>
+<option value="wdt:P2002">Twitterのユーザー名</option>
+<option value="wdt:P2437">シーズン数(テレビ)</option>
+<option value="wdt:P2093">著者名（文字列）</option>
+<option value="wdt:P57">監督</option>
+<option value="wdt:P3180">VNDB ID</option>
+<option value="wdt:P4073">ファンダム・ウィキID</option>
+<option value="wdt:P921">テーマ</option>
+<option value="wdt:P8687">ソーシャルメディアのフォロワー数</option>
+<option value="wdt:P910">記事の中心カテゴリ</option>
+<option value="wdt:P2603">キノポイスク映画識別子</option>
+<option value="wdt:P373">コモンズのカテゴリ</option>
+<option value="wdt:P272">制作会社</option>
+<option value="wdt:P1984">Anime News Network 漫画作品ID</option>
+<option value="wdt:P5646">AniDBアニメID</option>
+<option value="wdt:P154">ロゴ画像</option>
+<option value="wdt:P1482">Stack Exchangeタグ</option>
+<option value="wdt:P8670">キャラクターデザイナー</option>
+<option value="wdt:P580">開始日</option>
+<option value="wdt:P144">派生元</option>
+<option value="wdt:P5733">bilibili ID</option>
+<option value="wdt:P582">終了日</option>
+<option value="wdt:P435">MusicBrainz作品ID</option>
+<option value="wdt:P674">登場人物</option>
+<option value="wdt:P5845">アニメクリック・アニメID</option>
+<option value="wdt:P5846">アニメクリック小説ID</option>
+<option value="wdt:P1814">読み仮名</option>
+<option value="wdt:P973">詳細情報URL</option>
+<option value="wdt:P2635">作品中の区分の数</option>
+<option value="wdt:P2408">時代設定</option>
+<option value="wdt:P1434">舞台の架空世界</option>
+<option value="wdt:P3984">サブレディット</option>
+<option value="wdt:P364">原語</option>
+<option value="wdt:P478">巻</option>
+<option value="wdt:P8345">メディア・フランチャイズ</option>
+<option value="wdt:P1104">ページ数</option>
+<option value="wdt:P8729">AniListアニメID</option>
+<option value="wdt:P4086">MyAnimeListアニメID</option>
+<option value="wdt:P1881">登場人物の一覧</option>
+<option value="wdt:P214">VIAF識別子</option>
+<option value="wdt:P2354">一覧</option>
+<option value="wdt:P244">LCCN</option>
+<option value="wdt:P6262">ファンダム記事ID</option>
+<option value="wdt:P6760">Know Your Meme ID</option>
+<option value="wdt:P2013">フェイスブックID</option>
+<option value="wdt:P179">シリーズ</option>
+<option value="wdt:P1424">記事の中心テンプレート</option>
+<option value="wdt:P2512">スピンオフ</option>
+<option value="wdt:P2465">allcinema映画識別子</option>
+<option value="wdt:P5737">中国語版萌えっ娘百科事典の記事</option>
+<option value="wdt:P675">Google Books識別子</option>
+<option value="wdt:P58">脚本</option>
+<option value="wdt:P1813">短縮名</option>
+<option value="wdt:P349">国立国会図書館典拠ID</option>
+<option value="wdt:P1874">Netflix識別子</option>
+<option value="wdt:P2125">修正ヘボン式ローマ字表記</option>
+<option value="wdt:P2047">継続時間</option>
+<option value="wdt:P358">ディスコグラフィ</option>
+<option value="wdt:P840">物語の舞台</option>
+<option value="wdt:P5849">アニメクリック漫画ID</option>
+<option value="wdt:P3138">OFDb識別子</option>
+<option value="wdt:P527">以下を含む</option>
+<option value="wdt:P1712">Metacritic ID</option>
+<option value="wdt:P462">色</option>
+<option value="wdt:P7937">創作物の形態</option>
+<option value="wdt:P1258">RottenTomatoes識別子</option>
+<option value="wdt:P1970">MovieMeter movie識別子</option>
+<option value="wdt:P2283">使用するもの</option>
+<option value="wdt:P2529">ČSFD映画識別子</option>
+<option value="wdt:P4947">TMDb映画識別子</option>
+<option value="wdt:P6127">レターボックス映画識別子</option>
+<option value="wdt:P1562">AllMovie識別子</option>
+<option value="wdt:P2756">映倫区分</option>
+<option value="wdt:P6467">HuluシリーズID</option>
+<option value="wdt:P156">次</option>
+<option value="wdt:P161">出演者</option>
+<option value="wdt:P18">画像</option>
+<option value="wdt:P86">作曲</option>
+<option value="wdt:P6368">メディア芸術データベースアニメID</option>
+<option value="wdt:P724">インターネットアーカイブ識別子</option>
+<option value="wdt:P648">Open Library識別子</option>
+<option value="wdt:P1705">原語ラベル</option>
+<option value="wdt:P1449">ニックネーム</option>
+<option value="wdt:P6900">ニコニコ大百科</option>
+<option value="wdt:P98">編者</option>
+<option value="wdt:P155">前</option>
+<option value="wdt:P747">版</option>
+<option value="wdt:P1545">系列内での順序</option>
+<option value="wdt:P2360">この項目が想定する対象</option>
+<option value="wdt:P905">PORT film識別子</option>
+<option value="wdt:P2704">EIDR識別子</option>
+<option value="wdt:P1265">AlloCiné movie識別子</option>
+<option value="wdt:P2509">Movie Walker映画識別子</option>
+<option value="wdt:P2508">KINENOTE映画識別子</option>
+<option value="wdt:P2363">NMHH映画レイティング</option>
+<option value="wdt:P170">作者</option>
+<option value="wdt:P7886">メディア芸術データベース識別子</option>
+<option value="wdt:P942">主題歌</option>
+<option value="wdt:P3301">放送媒体</option>
+<option value="wdt:P5357">SF辞典識別子</option>
+<option value="wdt:P287">デザイン</option>
+<option value="wdt:P1889">以下と異なる</option>
+<option value="wdt:P9078">Discord招待ID</option>
+<option value="wdt:P1680">副題</option>
+<option value="wdt:P2438">ナレーター</option>
+<option value="wdt:P138">名前の由来</option>
+<option value="wdt:P178">開発元または開発者</option>
+<option value="wdt:P1933">MobyGames ID</option>
+<option value="wdt:P243">OCLC</option>
+<option value="wdt:P264">レコード・レーベル</option>
+<option value="wdt:P6369">メディア芸術データベースマンガID</option>
+<option value="wdt:P5247">ジャイアント・ボムID</option>
+<option value="wdt:P291">出版地</option>
+<option value="wdt:P1292">DNB識別子</option>
+<option value="wdt:P5337">グーグルニューストピックス識別子</option>
+<option value="wdt:P166">受賞</option>
+<option value="wdt:P2581">BabelNet識別子</option>
+			</select>
+            は？
+           </div>
+
+		<div class="center-item" >
+			<textarea id="query_area" cols="60" rows="10">
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
+select DISTINCT ?s ?sLabel ?o ?oLabel
+{ 
+  ?s wdt:P31/wdt:P279* wd:Q747381 .
+  ?s rdfs:label"#INPUT#"@ja. 
+  ?s #PROP# ?o.
+SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],ja,en". }
+}
+</textarea>
+		</div>
+		<div class="center-item">
+			<button id="send">Query</button>
+		</div>
+	</div>
+
+	<!-- 結果ペイン -->
+	<div id="result_div" class="container"></div>
+</body>
+
+</html>

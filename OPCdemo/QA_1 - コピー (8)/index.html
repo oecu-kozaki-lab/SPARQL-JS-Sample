@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+
+	<script src="sparql.js" defer></script>
+	
+	
+	
+	<script src="suggest.js"></script>
+	    <script src="con_list.js"></script>
+	    <script>
+	      <!--
+	      // wondowのonloadイベントでSuggestを生成
+	      // (listは、list.js内で定義している)
+	      var start = function(){new Suggest.Local("INPUT", "suggest", list, {dispMax: 30, highlight: true});};
+	      window.addEventListener ?
+	        window.addEventListener('load', start, false) :
+	        window.attachEvent('onload', start);
+	        //-->
+	    </script>
+
+	<style type="text/css">
+	      <!--
+	        #suggest {
+			  margin: 10px auto;position: absolute;
+			  background-color: #FFFFFF;
+			  border: 1px solid #CCCCFF;
+			  width: 400px;
+			  height:200px;
+			  overflow: auto;
+			}
+	        #suggest div {
+	          margin: 10px auto;
+		  padding: 1px;
+	          display: block;
+	          width: 400px;
+	          overflow: hidden;
+	          white-space: nowrap;
+	        }
+	        #suggest div.select{
+	          color: #FFFFFF;
+	          background-color: #3366FF;
+	        }
+	        #suggest div.over{
+	          background-color: #99CCFF;
+	        }
+	        #suggest strong{
+	          font-weight: bold;
+	        }
+	        -->
+    </style>
+	
+	
+	
+	<link rel="stylesheet" href="style.css">
+	<title>SPARQL Sample</title>
+</head>
+
+<body>
+	<header>
+		<h1>SPARQLによるQA[サジェスト機能付き]</h1>
+	</header>
+
+	<div class="container">
+	<div style="margin-top:4px;">
+            大学：<input id="INPUT" type="text" name="pattern" value="" autocomplete="off" size="80" style="display: block"/>
+            <!-- 補完候補を表示するエリア -->
+            <div id="suggest" style="display:none;"></div>
+            の
+	         <select id="propList">
+				<option value="wdt:P131">位置する行政区画</option>
+<option value="wdt:P17">国</option>
+<option value="wdt:P18">画像</option>
+<option value="wdt:P2002">Twitterのユーザー名</option>
+<option value="wdt:P2013">フェイスブックID</option>
+<option value="wdt:P213">ISNI</option>
+<option value="wdt:P214">VIAF識別子</option>
+<option value="wdt:P2427">GRID ID</option>
+<option value="wdt:P244">LCCN</option>
+<option value="wdt:P31">分類</option>
+<option value="wdt:P3417">Quora主題識別子</option>
+<option value="wdt:P349">国立国会図書館典拠ID</option>
+<option value="wdt:P3500">リングゴールドID</option>
+<option value="wdt:P373">コモンズのカテゴリ</option>
+<option value="wdt:P3876">教育機関の卒業者のカテゴリ</option>
+<option value="wdt:P571">成立日</option>
+<option value="wdt:P625">位置座標</option>
+<option value="wdt:P6366">Microsoft Academic ID</option>
+<option value="wdt:P646">Freebase識別子</option>
+<option value="wdt:P6698">ジャパンサーチ名称ID</option>
+<option value="wdt:P6782">ROR ID</option>
+<option value="wdt:P7251">大学・高等専門学校コード</option>
+<option value="wdt:P7859">WorldCat 識別ID</option>
+<option value="wdt:P856">公式ウェブサイト</option>
+<option value="wdt:P8687">ソーシャルメディアのフォロワー数</option>
+<option value="wdt:P910">記事の中心カテゴリ</option>
+			</select>
+            は？
+           </div>
+
+		<div class="center-item" >
+			<textarea id="query_area" cols="60" rows="10" hidden>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
+select DISTINCT ?s ?sLabel ?o ?oLabel
+{ 
+  ?s wdt:P31/wdt:P279* wd:Q3918 .
+  ?s rdfs:label"#INPUT#"@ja. 
+  ?s #PROP# ?o.
+SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],ja,en". }
+}
+</textarea>
+		</div>
+		<div class="center-item" >
+			<button id="send">Query</button>
+		</div>
+	</div>
+
+	<!-- 結果ペイン -->
+	<div id="result_div" class="container"></div>
+</body>
+
+</html>
