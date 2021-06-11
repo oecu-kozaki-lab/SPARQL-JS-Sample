@@ -1,4 +1,4 @@
-window.addEventListener('load', () => {
+window.addEventListener('load', () =>  {
 	const endpoint = "https://query.wikidata.org/sparql";
 	const defaultQuery = "select * {?s ?p ?o} LIMIT 100";
 
