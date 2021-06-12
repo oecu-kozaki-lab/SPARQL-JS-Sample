@@ -69,11 +69,13 @@
 
 	<div class="container">
 	<div style="margin-top:4px;">
-            疾患：<input id="INPUT" type="text" name="pattern" value="" autocomplete="off" size="80" style="display: block"/>
+            疾患：例-新型コロナウイルス感染症-症状<input id="INPUT" type="text" name="pattern" value="" autocomplete="off" size="80" style="display: block"/>
             <!-- 補完候補を表示するエリア -->
             <div id="suggest" style="display:none;"></div>
             の
 	         <select id="propList">
+			 		<option value="wdt:P780">症状</option>
+			 		<option value="wdt:P2176">治療薬</option>
 					<option value="wdt:P31">分類</option>
 					<option value="wdt:P279">上位クラス</option>
 					<option value="wdt:P2888">同一の概念</option>
@@ -107,11 +109,9 @@
 					<option value="wdt:P1417">ブリタニカ・オンラインID</option>
 					<option value="wdt:P3827">JSTOR主題識別子</option>
 					<option value="wdt:P604">MedlinePlus ID</option>
-					<option value="wdt:P780">症状</option>
 					<option value="wdt:P3841">P3841</option>
 					<option value="wdt:P7464">P7464</option>
 					<option value="wdt:P3417">Quora主題識別子</option>
-					<option value="wdt:P2176">治療薬</option>
 					<option value="wdt:P927">解剖学的位置</option>
 					<option value="wdt:P508">BNCFシソーラス</option>
 					<option value="wdt:P910">記事の中心カテゴリ</option>
