@@ -68,6 +68,15 @@ textArea.hidden;
 					}
 					else{
 						p.textContent = data[i]['oLabel'].value;
+						//oのWikidataページ
+						var src = data[i]['o'].value;
+						if(src.startsWith("http")){
+							var a = document.createElement('a');
+							a.textContent = "[Wikidata]";
+							a.href= src;
+							a.target= "_blank";
+							p.appendChild( a );
+						}
 					}					
 					mes.appendChild( p );
 				}
