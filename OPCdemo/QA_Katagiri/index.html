@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+
+	<script src="sparql.js" defer></script>
+	
+	
+	
+	<script src="suggest.js"></script>
+	    <script src="con_list.js"></script>
+	    <script>
+	      <!--
+	      // wondowのonloadイベントでSuggestを生成
+	      // (listは、list.js内で定義している)
+	      var start = function(){new Suggest.Local("INPUT", "suggest", list, {dispMax: 30, highlight: true});};
+	      window.addEventListener ?
+	        window.addEventListener('load', start, false) :
+	        window.attachEvent('onload', start);
+	        //-->
+	    </script>
+
+	<style type="text/css">
+	      <!--
+	        #suggest {
+			  margin: 10px auto;position: absolute;
+			  background-color: #FFFFFF;
+			  border: 1px solid #CCCCFF;
+			  width: 400px;
+			  height:200px;
+			  overflow: auto;
+			}
+	        #suggest div {
+	          margin: 10px auto;
+		  padding: 1px;
+	          display: block;
+	          width: 400px;
+	          overflow: hidden;
+	          white-space: nowrap;
+	        }
+	        #suggest div.select{
+	          color: #FFFFFF;
+	          background-color: #3366FF;
+	        }
+	        #suggest div.over{
+	          background-color: #99CCFF;
+	        }
+	        #suggest strong{
+	          font-weight: bold;
+	        }
+	        -->
+    </style>
+	
+	
+	
+	<link rel="stylesheet" href="style.css">
+	<title>SPARQL Sample</title>
+</head>
+
+<body>
+	<header>
+		<h1>SPARQLによるQA[サジェスト機能付き]</h1>
+	</header>
+
+	<div class="container">
+	<div style="margin-top:4px;">
+            ゲーム：<input id="INPUT" type="text" name="pattern" value="" autocomplete="off" size="80" style="display: block"/>
+            <!-- 補完候補を表示するエリア -->
+            <div id="suggest" style="display:none;"></div>
+            の
+	         <select id="propList">
+				<option value="wdt:P750">配給元</option>
+				<option value="wdt:P18">画像</option>
+				<option value="wdt:P31">分類</option>
+				<option value="wdt:P136">ジャンル</option>
+				<option value="wdt:P123">発行者</option>
+				<option value="wdt:P1411">ノミネート</option>
+				<option value="wdt:P856">公式ウェブサイト</option>
+				<option value="wdt:P852">ESRBレーティング</option>
+				<option value="wdt:P166">受賞</option>
+				<option value="wdt:P178">開発元または開発者</option>
+				<option value="wdt:P400">プラットフォーム</option>
+				<option value="wdt:P921">テーマ</option>
+				<option value="wdt:P908">PEGIレーティング</option>
+				<option value="wdt:P914">USKレーティング</option>
+				<option value="wdt:P345">IMDb識別子</option>
+				<option value="wdt:P1476">題名</option>
+				<option value="wdt:P1733">Steam ID</option>
+				<option value="wdt:P373">コモンズのカテゴリ</option>
+				<option value="wdt:P2397">YouTubeチャンネルID</option>
+				<option value="wdt:P2003">インスタグラムのユーザー名</option>
+				<option value="wdt:P1873">最大競技者数</option>
+				<option value="wdt:P1933">MobyGames ID</option>
+				<option value="wdt:P1872">最小競技者数</option>
+				<option value="wdt:P407">言語</option>
+				<option value="wdt:P2002">Twitterのユーザー名</option>
+				<option value="wdt:P179">シリーズ</option>
+				<option value="wdt:P408">エンジン</option>
+				<option value="wdt:P404">ゲーム・モード</option>
+				<option value="wdt:P495">本国</option>
+				<option value="wdt:P1712">Metacritic ID</option>
+				<option value="wdt:P2671">グーグル・ナレッジ・グラフ識別子</option>
+				<option value="wdt:P2013">フェイスブックID</option>
+				<option value="wdt:P8672">Twitter トピックスID</option>
+				<option value="wdt:P8687">ソーシャルメディアのフォロワー数</option>
+				<option value="wdt:P437">メディア形態</option>
+				<option value="wdt:P6337">PCGamingWiki ID</option>
+				<option value="wdt:P577">出版日</option>
+				<option value="wdt:P3984">サブレディット</option>
+				<option value="wdt:P479">入力機器</option>
+				<option value="wdt:P6867">ゲームペディア・ウィキID</option>
+				<option value="wdt:P5247">ジャイアント・ボムID</option>
+				<option value="wdt:P725">声優</option>
+				<option value="wdt:P7936">ビジネスモデル</option>
+
+			</select>
+            は？
+           </div>
+
+		<div class="center-item" >
+			<textarea id="query_area" cols="60" rows="10">
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
+select DISTINCT ?s ?sLabel ?o ?oLabel
+{ 
+  ?s wdt:P31/wdt:P279* wd:Q7889 .
+  ?s rdfs:label"#INPUT#"@ja. 
+  ?s #PROP# ?o.
+SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],ja,en". }
+}
+</textarea>
+		</div>
+		<div class="center-item">
+			<button id="send">Query</button>
+		</div>
+	</div>
+
+	<!-- 結果ペイン -->
+	<div id="result_div" class="container"></div>
+</body>
+
+</html>
