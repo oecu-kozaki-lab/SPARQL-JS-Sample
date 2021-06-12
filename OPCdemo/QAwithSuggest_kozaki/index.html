@@ -105,7 +105,12 @@
            </div>
 
 		<div class="center-item" >
-			<textarea id="query_area" cols="60" rows="10" hidden>
+		<input type="button" value="クエリの表示"
+       onclick="document.getElementById('query_area').style.display = 'block';">
+		<input type="button" value="非表示"
+       onclick="document.getElementById('query_area').style.display = 'none';">
+
+			<textarea id="query_area" cols="60" rows="10" style="display:none">
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX wd: <http://www.wikidata.org/entity/>
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
@@ -120,7 +125,7 @@ SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],ja,e
 </textarea>
 		</div>
 		<div class="center-item" >
-			<button id="send">Query</button>
+			<button id="send">質問する（クエリの実行）</button>
 		</div>
 	</div>
 
