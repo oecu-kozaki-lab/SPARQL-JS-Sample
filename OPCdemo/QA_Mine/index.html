@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+
+	<script src="sparql.js" defer></script>
+	
+	
+	
+	<script src="suggest.js"></script>
+	    <script src="con_list.js"></script> 
+	    <script>
+	      <!--
+	      // wondowのonloadイベントでSuggestを生成
+	      // (listは、list.js内で定義している)
+	      var start = function(){new Suggest.Local("INPUT", "suggest", list, {dispMax: 30, highlight: true});};
+	      window.addEventListener ?
+	        window.addEventListener('load', start, false) :
+	        window.attachEvent('onload', start);
+	        //-->
+	    </script>
+
+	<style type="text/css">
+	      <!--
+	        #suggest {
+			  margin: 10px auto;position: absolute;
+			  background-color: #FFFFFF;
+			  border: 1px solid #CCCCFF;
+			  width: 400px;
+			  height:200px;
+			  overflow: auto;
+			}
+	        #suggest div {
+	          margin: 10px auto;
+		  padding: 1px;
+	          display: block;
+	          width: 400px;
+	          overflow: hidden;
+	          white-space: nowrap;
+	        }
+	        #suggest div.select{
+	          color: #FFFFFF;
+	          background-color: #3366FF;
+	        }
+	        #suggest div.over{
+	          background-color: #99CCFF;
+	        }
+	        #suggest strong{
+	          font-weight: bold;
+	        }
+	        -->
+    </style>
+	
+	
+	
+	<link rel="stylesheet" href="style.css">
+	<title>SPARQL Sample</title>
+</head>
+
+<body>
+	<header>
+		<h1>SPARQLによるQA[サジェスト機能付き]</h1>
+	</header>
+
+	<div class="container">
+	<div style="margin-top:4px;">
+            疾患：<input id="INPUT" type="text" name="pattern" value="" autocomplete="off" size="80" style="display: block"/>
+            <!-- 補完候補を表示するエリア -->
+            <div id="suggest" style="display:none;"></div>
+            の
+	         <select id="propList">
+					<option value="wdt:P31">分類</option>
+					<option value="wdt:P279">上位クラス</option>
+					<option value="wdt:P2888">同一の概念</option>
+					<option value="wdt:P5270">P5270</option>
+					<option value="wdt:P2892">UMLS CUI</option>
+					<option value="wdt:P1550">P1550</option>
+					<option value="wdt:P4229">P4229</option>
+					<option value="wdt:P492">OMIM ID</option>
+					<option value="wdt:P699">Disease Ontology ID</option>
+					<option value="wdt:P5008">ウィキメディアプロジェクトの作業リスト</option>
+					<option value="wdt:P486">MeSH ID</option>
+					<option value="wdt:P1995">診療科</option>
+					<option value="wdt:P2293">遺伝的関連</option>
+					<option value="wdt:P6366">Microsoft Academic ID</option>
+					<option value="wdt:P4317">P4317</option>
+					<option value="wdt:P1748">NCI Thesaurus ID</option>
+					<option value="wdt:P7807">P7807</option>
+					<option value="wdt:P646">Freebase識別子</option>
+					<option value="wdt:P672">MeSHコード</option>
+					<option value="wdt:P665">京都遺伝子ゲノム百科事典ID</option>
+					<option value="wdt:P7329">P7329</option>
+					<option value="wdt:P1692">P1692</option>
+					<option value="wdt:P557">DiseasesDB</option>
+					<option value="wdt:P2671">グーグル・ナレッジ・グラフ識別子</option>
+					<option value="wdt:P494">ICD-10</option>
+					<option value="wdt:P373">コモンズのカテゴリ</option>
+					<option value="wdt:P493">ICD-9</option>
+					<option value="wdt:P828">原因</option>
+					<option value="wdt:P673">eMedicine</option>
+					<option value="wdt:P18">画像</option>
+					<option value="wdt:P1417">ブリタニカ・オンラインID</option>
+					<option value="wdt:P3827">JSTOR主題識別子</option>
+					<option value="wdt:P604">MedlinePlus ID</option>
+					<option value="wdt:P780">症状</option>
+					<option value="wdt:P3841">P3841</option>
+					<option value="wdt:P7464">P7464</option>
+					<option value="wdt:P3417">Quora主題識別子</option>
+					<option value="wdt:P2176">治療薬</option>
+					<option value="wdt:P927">解剖学的位置</option>
+					<option value="wdt:P508">BNCFシソーラス</option>
+					<option value="wdt:P910">記事の中心カテゴリ</option>
+					<option value="wdt:P2581">BabelNet識別子</option>
+					<option value="wdt:P5082">P5082</option>
+					<option value="wdt:P1325">外部データURL</option>
+					<option value="wdt:P138">名前の由来</option>
+					<option value="wdt:P5806">P5806</option>
+					<option value="wdt:P1296">カタルーニャ大百科事典識別子</option>
+					<option value="wdt:P1461">Patientplus識別子</option>
+					<option value="wdt:P3471">P3471</option>
+					<option value="wdt:P667">ICPC-2コード</option>
+					<option value="wdt:P8408">KBぺディアID</option>
+					<option value="wdt:P244">LCCN</option>
+					<option value="wdt:P563">P563</option>
+					<option value="wdt:P1343">掲載している事典</option>
+					<option value="wdt:P227">GND識別子</option>
+					<option value="wdt:P1889">以下と異なる</option>
+					<option value="wdt:P3219">P3219</option>
+					<option value="wdt:P689">障害部位</option>
+					<option value="wdt:P2924">ロシア大百科事典オンラインID</option>
+					<option value="wdt:P7995">P7995</option>
+					<option value="wdt:P4746">P4746</option>
+					<option value="wdt:P923">診察</option>
+					<option value="wdt:P349">国立国会図書館典拠ID</option>
+					<option value="wdt:P1245">P1245</option>
+					<option value="wdt:P4527">英国議会類義語辞典ID</option>
+					<option value="wdt:P1060">感染経路</option>
+					<option value="wdt:P2347">P2347</option>
+					<option value="wdt:P668">P668</option>
+					<option value="wdt:P924">治療</option>
+					<option value="wdt:P1269">親項目</option>
+					<option value="wdt:P460">同一とされる事物</option>
+					<option value="wdt:P61">発見者または発明者</option>
+					<option value="wdt:P8814">P8814</option>
+					<option value="wdt:P3488">最小潜伏期間</option>
+					<option value="wdt:P3487">最大潜伏期間</option>
+					<option value="wdt:P17">国</option>
+					<option value="wdt:P1605">自然宿主</option>
+					<option value="wdt:P1542">以下の原因</option>
+					<option value="wdt:P7033">P7033</option>
+					<option value="wdt:P8656">P8656</option>
+					<option value="wdt:P3569">P3569</option>
+					<option value="wdt:P461">反対の概念</option>
+					<option value="wdt:P276">場所</option>
+					<option value="wdt:P7818">P7818</option>
+					<option value="wdt:P4839">Wolfram言語への入力</option>
+					<option value="wdt:P1193">有病率</option>
+					<option value="wdt:P527">以下を含む</option>
+					<option value="wdt:P6532">P6532</option>
+					<option value="wdt:P1199">遺伝形式</option>
+					<option value="wdt:P268">BNF</option>
+					<option value="wdt:P3720">P3720</option>
+					<option value="wdt:P3222">P3222</option>
+					<option value="wdt:P5642">危険因子</option>
+					<option value="wdt:P6363">P6363</option>
+					<option value="wdt:P8061">AGROVOC ID</option>
+					<option value="wdt:P361">以下の一部分</option>
+					<option value="wdt:P1120">死亡者数</option>
+					<option value="wdt:P935">コモンズのギャラリー</option>
+					<option value="wdt:P3984">サブレディット</option>
+					<option value="wdt:P3365">トレッカーニID</option>
+					<option value="wdt:P5131">取り得る医学的所見</option>
+					<option value="wdt:P9272">P9272</option>
+					<option value="wdt:P580">開始日</option>
+					<option value="wdt:P9545">P9545</option>
+					<option value="wdt:P575">発見日</option>
+					<option value="wdt:P6694">P6694</option>
+					<option value="wdt:P973">詳細情報URL</option>
+					<option value="wdt:P1051">PSH識別子</option>
+					<option value="wdt:P5063">P5063</option>
+					<option value="wdt:P5198">P5198</option>
+					<option value="wdt:P585">時点</option>
+					<option value="wdt:P2004">P2004</option>
+					<option value="wdt:P950">BNE識別子</option>
+					<option value="wdt:P582">終了日</option>
+					<option value="wdt:P2163">FAST ID</option>
+					<option value="wdt:P1583">P1583</option>
+					<option value="wdt:P1225">P1225</option>
+					<option value="wdt:P1424">記事の中心テンプレート</option>
+					<option value="wdt:P1050">医学的状況</option>
+					<option value="wdt:P5019">P5019</option>
+					<option value="wdt:P2074">internetmedicin.se ID</option>
+					<option value="wdt:P1368">LNB識別子</option>
+					<option value="wdt:P4342">P4342</option>
+					<option value="wdt:P989">話し言葉の音声</option>
+					<option value="wdt:P8785">P8785</option>
+					<option value="wdt:P948">ページバナー</option>
+					<option value="wdt:P920">P920</option>
+					<option value="wdt:P3031">EPPOコード</option>
+					<option value="wdt:P269">IdRef識別子</option>
+					<option value="wdt:P6573">P6573</option>
+					<option value="wdt:P2572">ハッシュタグ</option>
+					<option value="wdt:P1603">症例数</option>
+					<option value="wdt:P2579">研究する分野</option>
+					<option value="wdt:P6417">P6417</option>
+					<option value="wdt:P691">NKC識別子</option>
+					<option value="wdt:P6706">デ・アゴスティーニID</option>
+					<option value="wdt:P569">生年月日</option>
+					<option value="wdt:P7982">P7982</option>
+					<option value="wdt:P4255">P4255</option>
+					<option value="wdt:P4254">P4254</option>
+					<option value="wdt:P3553">P3553</option>
+					<option value="wdt:P577">出版日</option>
+					<option value="wdt:P5698">P5698</option>
+					<option value="wdt:P1256">P1256</option>
+					<option value="wdt:P1375">NSK識別子</option>
+					<option value="wdt:P1552">特性</option>
+					<option value="wdt:P21">性別</option>
+					<option value="wdt:P19">出生地</option>
+					<option value="wdt:P1476">題名</option>
+					<option value="wdt:P3457">致命率</option>
+					<option value="wdt:P106">職業</option>
+					<option value="wdt:P1036">デューイ十進分類法</option>
+					<option value="wdt:P6839">P6839</option>
+					<option value="wdt:P1814">読み仮名</option>
+					<option value="wdt:P27">国籍</option>
+					<option value="wdt:P407">言語</option>
+					<option value="wdt:P625">位置座標</option>
+					<option value="wdt:P50">著者</option>
+					<option value="wdt:P5395">P5395</option>
+					<option value="wdt:P8285">P8285</option>
+					<option value="wdt:P4223">P4223</option>
+					<option value="wdt:P1478">直接の原因</option>
+					<option value="wdt:P8072">P8072</option>
+					<option value="wdt:P443">音声ファイル</option>
+					<option value="wdt:P4613">P4613</option>
+					<option value="wdt:P1813">短縮名</option>
+					<option value="wdt:P1001">管轄・適用区域</option>
+					<option value="wdt:P570">死亡年月日</option>
+					<option value="wdt:P179">シリーズ</option>
+					<option value="wdt:P1339">負傷者数</option>
+					<option value="wdt:P921">テーマ</option>
+					<option value="wdt:P495">本国</option>
+					<option value="wdt:P6293">P6293</option>
+					<option value="wdt:P5437">EuroVoc ID</option>
+					<option value="wdt:P7388">P7388</option>
+					<option value="wdt:P1705">原語ラベル</option>
+					<option value="wdt:P8433">P8433</option>
+					<option value="wdt:P7727">立法委員会</option>
+					<option value="wdt:P6216">著作権の状況</option>
+					<option value="wdt:P1031">P1031</option>
+					<option value="wdt:P953">全文テキスト</option>
+					<option value="wdt:P734">姓</option>
+					<option value="wdt:P101">専門分野</option>
+					<option value="wdt:P703">これを持つタクソン</option>
+					<option value="wdt:P5085">P5085</option>
+					<option value="wdt:P3509">ダーゲンス・ニュヘテル トピックID</option>
+					<option value="wdt:P10">映像</option>
+					<option value="wdt:P8309">P8309</option>
+					<option value="wdt:P1930">DSM-5</option>
+					<option value="wdt:P735">名</option>
+					<option value="wdt:P6200">P6200</option>
+					<option value="wdt:P793">重要な出来事</option>
+					<option value="wdt:P571">成立日</option>
+					<option value="wdt:P7685">P7685</option>
+					<option value="wdt:P2239">応急処置</option>
+					<option value="wdt:P636">投与経路</option>
+					<option value="wdt:P509">死因</option>
+					<option value="wdt:P2854">P2854</option>
+					<option value="wdt:P9287">P9287</option>
+					<option value="wdt:P1149">アメリカ議会図書館分類表</option>
+					<option value="wdt:P8168">P8168</option>
+					<option value="wdt:P653">PubMed Health ID</option>
+					<option value="wdt:P1693">Terminologia Embryologica (TE)</option>
+					<option value="wdt:P3235">P3235</option>
+					<option value="wdt:P1559">母語表記</option>
+					<option value="wdt:P685">NCBI Taxonomy ID</option>
+					<option value="wdt:P7502">P7502</option>
+					<option value="wdt:P1651">YouTubeビデオID</option>
+					<option value="wdt:P856">公式ウェブサイト</option>
+					<option value="wdt:P8248">P8248</option>
+					<option value="wdt:P4212">P4212</option>
+					<option value="wdt:P7500">合併症</option>
+					<option value="wdt:P1395">NCI識別子</option>
+					<option value="wdt:P3916">ユネスコ・シソーラスID</option>
+					<option value="wdt:P5844">P5844</option>
+					<option value="wdt:P4854">P4854</option>
+					<option value="wdt:P69">出身校</option>
+					<option value="wdt:P2283">使用するもの</option>
+					<option value="wdt:P1345">被害者数</option>
+					<option value="wdt:P6262">ファンダム記事ID</option>
+					<option value="wdt:P1590">死傷者数</option>
+					<option value="wdt:P1479">寄与因子</option>
+					<option value="wdt:P5160">P5160</option>
+					<option value="wdt:P8349">P8349</option>
+					<option value="wdt:P189">発見場所</option>
+					<option value="wdt:P7827">P7827</option>
+					<option value="wdt:P902">スイス歴史事典識別子</option>
+					<option value="wdt:P3221">P3221</option>
+					<option value="wdt:P7293">NLP ID (record)</option>
+					<option value="wdt:P1382">重複</option>
+					<option value="wdt:P641">スポーツ</option>
+					<option value="wdt:P8015">P8015</option>
+					<option value="wdt:P3982">TA98ラテン語名</option>
+					<option value="wdt:P1323">Terminologia Anatomica 98</option>
+					<option value="wdt:P2737">以下の和集合</option>
+					<option value="wdt:P225">学名</option>
+					<option value="wdt:P171">上位タクソン</option>
+					<option value="wdt:P1412">使用可能言語</option>
+					<option value="wdt:P131">位置する行政区画</option>
+					<option value="wdt:P20">死亡地</option>
+					<option value="wdt:P3430">P3430</option>
+					<option value="wdt:P9084">P9084</option>
+					<option value="wdt:P9346">P9346</option>
+					<option value="wdt:P9100">GitHubトピック</option>
+					<option value="wdt:P8010">回復症例数</option>
+					<option value="wdt:P3847">P3847</option>
+					<option value="wdt:P9368">P9368</option>
+					<option value="wdt:P1433">叢書</option>
+					<option value="wdt:P214">VIAF識別子</option>
+					<option value="wdt:P353">遺伝子略名</option>
+					<option value="wdt:P6760">Know Your Meme ID</option>
+					<option value="wdt:P154">ロゴ画像</option>
+					<option value="wdt:P3938">命名者</option>
+					<option value="wdt:P2975">宿主</option>
+					<option value="wdt:P5398">TDKIV用語ID</option>
+					<option value="wdt:P2738">以下の非交和</option>
+					<option value="wdt:P8313">P8313</option>
+					<option value="wdt:P3492">基本再生産数</option>
+					<option value="wdt:P2612">TEDトピックID</option>
+					<option value="wdt:P9281">P9281</option>
+					<option value="wdt:P1807">P1807</option>
+					<option value="wdt:P5555">図式</option>
+					<option value="wdt:P1449">ニックネーム</option>
+					<option value="wdt:P6611">P6611</option>
+					<option value="wdt:P242">位置地図画像</option>
+					<option value="wdt:P1014">AAT識別子</option>
+					<option value="wdt:P6058">ラルースID</option>
+					<option value="wdt:P6081">P6081</option>
+					<option value="wdt:P7173">TA2 ID</option>
+					<option value="wdt:P805">主題</option>
+					<option value="wdt:P663">DSM-IVの分類</option>
+					<option value="wdt:P2597">グラム染色</option>
+					<option value="wdt:P105">分類階級</option>
+					<option value="wdt:P2860">引用文献</option>
+					<option value="wdt:P2093">著者名（文字列）</option>
+					<option value="wdt:P932">PMCID</option>
+					<option value="wdt:P698">PubMed ID</option>
+					<option value="wdt:P478">巻</option>
+					<option value="wdt:P433">号</option>
+					<option value="wdt:P356">DOI</option>
+					<option value="wdt:P304">ページ番号</option>
+					<option value="wdt:P800">主要作品</option>
+					<option value="wdt:P535">Find a Grave</option>
+					<option value="wdt:P119">埋葬地</option>
+					<option value="wdt:P2031">活動期間（開始）</option>
+					<option value="wdt:P6404">P6404</option>
+					<option value="wdt:P710">参加者</option>
+					<option value="wdt:P533">標的</option>
+					<option value="wdt:P1292">DNB識別子</option>
+					<option value="wdt:P123">発行者</option>
+					<option value="wdt:P3886">加害者数</option>
+					<option value="wdt:P1617">P1617</option>
+					<option value="wdt:P906">SELIBR</option>
+					<option value="wdt:P2959">恒久的な重複項目</option>
+					<option value="wdt:P7832">P7832</option>
+					<option value="wdt:P2561">名前</option>
+					<option value="wdt:P8031">加害者</option>
+					<option value="wdt:P742">別名</option>
+					<option value="wdt:P1846">分布図</option>
+					<option value="wdt:P175">演者・演奏者・歌手</option>
+					<option value="wdt:P136">ジャンル</option>
+					<option value="wdt:P5572">発現時期</option>
+					<option value="wdt:P4196">細胞遺伝学的位置</option>
+					<option value="wdt:P2548">DNA鎖の向き</option>
+					<option value="wdt:P1057">染色体</option>
+					<option value="wdt:P704">P704</option>
+					<option value="wdt:P688">遺伝子産物</option>
+					<option value="wdt:P684">オーソログ</option>
+					<option value="wdt:P645">ゲノム上の終点</option>
+					<option value="wdt:P644">ゲノム上の開始点</option>
+					<option value="wdt:P639">P639</option>
+					<option value="wdt:P594">P594</option>
+					<option value="wdt:P593">HomoloGene ID</option>
+					<option value="wdt:P354">HGNC ID</option>
+					<option value="wdt:P351">Entrez Gene ID</option>
+					<option value="wdt:P6477">持たない特性</option>
+					<option value="wdt:P9318">P9318</option>
+					<option value="wdt:P5337">グーグルニューストピックス識別子</option>
+					<option value="wdt:P2184">主題の歴史</option>
+					<option value="wdt:P137">運営者</option>
+					<option value="wdt:P7901">P7901</option>
+					<option value="wdt:P5429">P5429</option>
+					<option value="wdt:P8016">P8016</option>
+					<option value="wdt:P1448">正式名称</option>
+					<option value="wdt:P183">生息域</option>
+					<option value="wdt:P7830">P7830</option>
+					<option value="wdt:P3794">P3794</option>
+					<option value="wdt:P1427">出発地</option>
+					<option value="wdt:P1890">P1890</option>
+					<option value="wdt:P3201">P3201</option>
+					<option value="wdt:P1441">登場する作品</option>
+					<option value="wdt:P2844">発生率</option>
+					<option value="wdt:P7690">P7690</option>
+					<option value="wdt:P2013">フェイスブックID</option>
+					<option value="wdt:P9186">P9186</option>
+					<option value="wdt:P9353">P9353</option>
+					<option value="wdt:P1535">使用者</option>
+					<option value="wdt:P7687">P7687</option>
+					<option value="wdt:P3021">イラン百科事典ID</option>
+					<option value="wdt:P2115">P2115</option>
+					<option value="wdt:P2910">アイコン</option>
+					<option value="wdt:P1880">測定単位</option>
+					<option value="wdt:P7775">P7775</option>
+					<option value="wdt:P2841">発症年齢</option>
+					<option value="wdt:P1114">数</option>
+					<option value="wdt:P998">dmoz</option>
+					<option value="wdt:P7697">P7697</option>
+					<option value="wdt:P1402">FMA識別子</option>
+					<option value="wdt:P4670">P4670</option>
+					<option value="wdt:P4233">P4233</option>
+					<option value="wdt:P1299">描写した作品</option>
+					<option value="wdt:P5132">以下の存在を示唆する</option>
+					<option value="wdt:P724">インターネットアーカイブ識別子</option>
+					<option value="wdt:P4333">P4333</option>
+					<option value="wdt:P140">宗教</option>
+					<option value="wdt:P103">母語</option>
+					<option value="wdt:P6553">希望代名詞</option>
+					<option value="wdt:P5715">P5715</option>
+					<option value="wdt:P2038">P2038</option>
+					<option value="wdt:P1960">Google Scholar 著者ID</option>
+					<option value="wdt:P241">軍種</option>
+					<option value="wdt:P1264">あてはまる期間</option>
+					<option value="wdt:P7859">WorldCat 識別ID</option>
+					<option value="wdt:P5587">P5587</option>
+					<option value="wdt:P5375">P5375</option>
+					<option value="wdt:P5326">原記載の文献</option>
+					<option value="wdt:P3630">バベリオ著者ID</option>
+					<option value="wdt:P1977">P1977</option>
+					<option value="wdt:P1196">死亡状況</option>
+					<option value="wdt:P1006">NTA PPN 識別子</option>
+					<option value="wdt:P213">ISNI</option>
+					<option value="wdt:P7959">歴史的カウンティ</option>
+					<option value="wdt:P4331">P4331</option>
+					<option value="wdt:P2032">活動期間（終了）</option>
+					<option value="wdt:P5055">IRMNG ID</option>
+					<option value="wdt:P3186">TAXREF ID</option>
+					<option value="wdt:P3151">iNaturalistの分類群ID</option>
+					<option value="wdt:P3088">P3088</option>
+					<option value="wdt:P2946">P2946</option>
+					<option value="wdt:P2752">P2752</option>
+					<option value="wdt:P1991">P1991</option>
+					<option value="wdt:P1939">P1939</option>
+					<option value="wdt:P846">GBIF-ID</option>
+					<option value="wdt:P830">Encyclopedia of Life ID</option>
+					<option value="wdt:P815">ITIS TSN</option>
+					<option value="wdt:P6179">P6179</option>
+					<option value="wdt:P5875">P5875</option>
+					<option value="wdt:P3181">P3181</option>
+					<option value="wdt:P275">利用許諾</option>
+					<option value="wdt:P413">ポジション</option>
+					<option value="wdt:P54">所属チーム</option>
+					<option value="wdt:P7763">作者の著作権状態</option>
+					<option value="wdt:P6284">P6284</option>
+					<option value="wdt:P1415">OBIN</option>
+					<option value="wdt:P551">居住地</option>
+					<option value="wdt:P3989">メンバーの職業</option>
+					<option value="wdt:P1711">P1711</option>
+					<option value="wdt:P1442">墓の画像</option>
+					<option value="wdt:P9000">古代史百科事典ID</option>
+					<option value="wdt:P2812">MathWorld識別子</option>
+					<option value="wdt:P8204">表形式の症例データ</option>
+					<option value="wdt:P8045">感染症対策</option>
+					<option value="wdt:P8011">医療検査数</option>
+					<option value="wdt:P7153">重要な場所</option>
+					<option value="wdt:P949">NLI（イスラエル）識別子</option>
+					<option value="wdt:P2289">静脈排出路</option>
+					<option value="wdt:P2286">動脈支配</option>
+					<option value="wdt:P3292">P3292</option>
+					<option value="wdt:P6283">P6283</option>
+					<option value="wdt:P172">民族</option>
+					<option value="wdt:P2001">文化観光部2000年式によるラテン語転写</option>
+					<option value="wdt:P1942">マッキューン＝ライシャワー式によるラテン語転写</option>
+					<option value="wdt:P9198">P9198</option>
+					<option value="wdt:P8519">RKDシソーラスID</option>
+					<option value="wdt:P7952">P7952</option>
+					<option value="wdt:P1142">政治イデオロギー</option>
+					<option value="wdt:P3123">P3123</option>
+					<option value="wdt:P8351">P8351</option>
+					<option value="wdt:P7555">P7555</option>
+					<option value="wdt:P7335">P7335</option>
+					<option value="wdt:P1933">MobyGames ID</option>
+					<option value="wdt:P400">プラットフォーム</option>
+					<option value="wdt:P178">開発元または開発者</option>
+					<option value="wdt:P155">前</option>
+					<option value="wdt:P421">標準時間帯</option>
+					<option value="wdt:P7704">ヨーロピアナ・エンティティ</option>
+					<option value="wdt:P1104">ページ数</option>
+					<option value="wdt:P957">ISBN-10</option>
+					<option value="wdt:P291">出版地</option>
+					<option value="wdt:P212">ISBN-13</option>
+					<option value="wdt:P8032">被害者</option>
+					<option value="wdt:P686">遺伝子オントロジーID</option>
+					<option value="wdt:P248">出典</option>
+					<option value="wdt:P8799">P8799</option>
+					<option value="wdt:P7889">P7889</option>
+					<option value="wdt:P7738">P7738</option>
+					<option value="wdt:P6223">P6223</option>
+					<option value="wdt:P5247">ジャイアント・ボムID</option>
+					<option value="wdt:P5125">ウィキメディアの概要記事</option>
+					<option value="wdt:P5088">P5088</option>
+					<option value="wdt:P4946">P4946</option>
+					<option value="wdt:P4073">ファンダム・ウィキID</option>
+					<option value="wdt:P3081">半壊</option>
+					<option value="wdt:P156">次</option>
+					<option value="wdt:P6813">P6813</option>
+					<option value="wdt:P2003">インスタグラムのユーザー名</option>
+					<option value="wdt:P2002">Twitterのユーザー名</option>
+					<option value="wdt:P9375">P9375</option>
+					<option value="wdt:P8687">ソーシャルメディアのフォロワー数</option>
+					<option value="wdt:P8374">P8374</option>
+					<option value="wdt:P6849">P6849</option>
+					<option value="wdt:P1876">船</option>
+					<option value="wdt:P1537">以下の寄与因子</option>
+					<option value="wdt:P706">位置する地形</option>
+					<option value="wdt:P1554">UBERON ID</option>
+					<option value="wdt:P9401">P9401</option>
+					<option value="wdt:P9400">P9400</option>
+					<option value="wdt:P3241">カトリック百科事典識別子</option>
+					<option value="wdt:P217">所蔵番号</option>
+					<option value="wdt:P195">所蔵者</option>
+					<option value="wdt:P170">作者</option>
+					<option value="wdt:P1954">ディスコグス・マスター識別子</option>
+					<option value="wdt:P437">メディア形態</option>
+					<option value="wdt:P436">MusicBrainzリリース・グループID</option>
+					<option value="wdt:P264">レコード・レーベル</option>
+					<option value="wdt:P1151">ウィキメディアのポータル</option>
+					<option value="wdt:P9349">P9349</option>
+					<option value="wdt:P8672">Twitter トピックスID</option>
+					<option value="wdt:P6104">担当ウィキプロジェクト</option>
+					<option value="wdt:P5551">P5551</option>
+					<option value="wdt:P3342">重要な人物</option>
+					<option value="wdt:P2868">役割</option>
+					<option value="wdt:P1840">調査者</option>
+					<option value="wdt:P6885">歴史的地域</option>
+					<option value="wdt:P2318">初参加者</option>
+					<option value="wdt:P1557">表現する概念</option>
+					<option value="wdt:P2354">一覧</option>
+					<option value="wdt:P898">IPAによる発音表記</option>
+					<option value="wdt:P7723">P7723</option>
+					<option value="wdt:P7686">P7686</option>
+					<option value="wdt:P6015">ハンドブック・オヴ・テキサスID</option>
+					<option value="wdt:P652">P652</option>
+					<option value="wdt:P747">版</option>
+					<option value="wdt:P2167">UNSPSCコード</option>
+					<option value="wdt:P4210">P4210</option>
+					<option value="wdt:P4801">P4801</option>
+					<option value="wdt:P7276">P7276</option>
+					<option value="wdt:P9521">P9521</option>
+					<option value="wdt:P7506">Naver百科事典ID</option>
+					<option value="wdt:P2716">コラージュ画像</option>
+					<option value="wdt:P8895">P8895</option>
+					<option value="wdt:P854">出典URL</option>
+					<option value="wdt:P3885">P3885</option>
+					<option value="wdt:P463">所属グループ</option>
+					<option value="wdt:P7140">P7140</option>
+					<option value="wdt:P6520">P6520</option>
+					<option value="wdt:P4293">20世紀報道資料集フォルダーID</option>
+					<option value="wdt:P4236">P4236</option>
+					<option value="wdt:P157">殺害者</option>
+					<option value="wdt:P9513">P9513</option>
+					<option value="wdt:P181">分布域</option>
+					<option value="wdt:P7688">P7688</option>
+					<option value="wdt:P1741">GTAA ID</option>
+					<option value="wdt:P8625">書誌</option>
+					<option value="wdt:P640">Leonore ID</option>
+					<option value="wdt:P4903">新ジョージア百科事典ID</option>
+					<option value="wdt:P576">廃止日</option>
+					<option value="wdt:P7647">P7647</option>
+					<option value="wdt:P5250">IABコード</option>
+					<option value="wdt:P2210">以下と比較</option>
+					<option value="wdt:P7842">P7842</option>
+					<option value="wdt:P696">Interlex ID</option>
+					<option value="wdt:P6680">P6680</option>
+					<option value="wdt:P4427">P4427</option>
+					<option value="wdt:P1709">同等のクラス</option>
+					<option value="wdt:P8539">P8539</option>
+					<option value="wdt:P4211">P4211</option>
+					<option value="wdt:P7387">P7387</option>
+					<option value="wdt:P9526">P9526</option>
+					<option value="wdt:P7512">P7512</option>
+					<option value="wdt:P5357">SF辞典識別子</option>
+				
+			</select>
+            は？
+           </div>
+
+		<div class="center-item" >
+			<textarea id="query_area" cols="60" rows="10">
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
+select DISTINCT  ?sLabel ?o ?oLabel
+{ 
+?s wdt:P31/wdt:P279* wd:Q12136 .
+?s rdfs:label"#INPUT#"@ja. 
+?s #PROP# ?o.
+
+SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],ja,en". }
+}
+</textarea>
+		</div>
+		<div class="center-item">
+			<button id="send">Query</button>
+		</div>
+	</div>
+
+	<!-- 結果ペイン -->
+	<div id="result_div" class="container"></div>
+</body>
+
+</html>
