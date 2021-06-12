@@ -1,4 +1,4 @@
-window.addEventListener('load', () => {
+window.addEventListener('load', () =>  {
 	const endpoint = "https://query.wikidata.org/sparql";
 	const defaultQuery = "select * {?s ?p ?o} LIMIT 100";
 
@@ -45,10 +45,30 @@ textArea.hidden;
 			var i=0;
 			var len = data.length;
 			var mesText = "" ;
+			var str ="";
 			while(i < len){
 				var p = document.createElement('p');
 				if(data[i]['oLabel']!=null){
-					p.textContent = data[i]['oLabel'].value;
+					
+					str = data[i]['oLabel'].value;
+					
+					if(str.startsWith("http://commons.wikimedia.org/")){
+						var img = document.createElement('img');
+						img.textContent = str;
+						img.src= str;
+						img.width=900;
+						p.appendChild( img );					
+					}
+					else if(str.startsWith("http")){
+						var a = document.createElement('a');
+						a.textContent = str;
+						a.href= str;
+						a.target= "_blank";
+						p.appendChild( a );					
+					}
+					else{
+						p.textContent = data[i]['oLabel'].value;
+					}					
 					mes.appendChild( p );
 				}
 				i++;
