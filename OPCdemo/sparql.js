@@ -88,13 +88,15 @@ textArea.hidden;
 			mes.appendChild( p_end );
 			
 			//情報源の表示
-			if(data[0]['s']!=null){
-				str = data[0]['s'].value;
-				var a = document.createElement('a');
-				a.textContent = "情報源："+data[0]['sLabel'].value+"のWikidata（"+str+"）";
-				a.href= str;
-				a.target= "_blank";
-				mes.appendChild( a );
+			if(data[0] != undefined){
+				if(data[0]['s']!=null){
+					str = data[0]['s'].value;
+					var a = document.createElement('a');
+					a.textContent = "情報源："+data[0]['sLabel'].value+"のWikidata（"+str+"）";
+					a.href= str;
+					a.target= "_blank";
+					mes.appendChild( a );
+				}
 			}
 			
 			

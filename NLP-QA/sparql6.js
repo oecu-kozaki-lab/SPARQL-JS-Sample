@@ -47,9 +47,71 @@ textArea.hidden;
 			const resultData = await result.json();	
 			const vars = resultData.head.vars;
 			const data = resultData.results.bindings
-
 		//結果を複数表示したいときにも対応
 			const mes = document.createElement('div');
+			var i=0;
+			var len = data.length;
+			var mesText = "" ;
+			var str ="";
+			while(i < len){
+				var p = document.createElement('p');
+				if(data[i]['oLabel']!=null){
+					
+					str = data[i]['oLabel'].value;
+					
+					if(str.startsWith("http://commons.wikimedia.org/")){
+						var img = document.createElement('img');
+						img.textContent = str;
+						img.src= str;
+						img.width=900;
+						p.appendChild( img );					
+					}
+					else if(str.startsWith("http")){
+						var a = document.createElement('a');
+						a.textContent = str;
+						a.href= str;
+						a.target= "_blank";
+						p.appendChild( a );					
+					}
+					else{
+						p.textContent = data[i]['oLabel'].value;
+						//oのWikidataページ
+						var src = data[i]['o'].value;
+						if(src.startsWith("http")){
+							var a = document.createElement('a');
+							a.textContent = "[Wikidata]";
+							a.href= src;
+							a.target= "_blank";
+							p.appendChild( a );
+						}
+					}					
+					mes.appendChild( p );
+				}
+				i++;
+				
+			}
+			var p_end = document.createElement('p');
+			p_end.textContent = 'です．';
+			mes.appendChild( p_end );
+			
+			//情報源の表示
+			if(data[0] != undefined){
+				if(data[0]['s']!=null){
+					str = data[0]['s'].value;
+					var a = document.createElement('a');
+					a.textContent = "情報源："+data[0]['sLabel'].value+"のWikidata（"+str+"）";
+					a.href= str;
+					a.target= "_blank";
+					mes.appendChild( a );
+				}
+			}
+				
+			
+			
+			resultArea.appendChild(mes);
+
+		//結果を複数表示したいときにも対応
+/*			const mes = document.createElement('div');
 			var i=0;
 			var len = data.length;
 			var mesText = "" ;
@@ -65,7 +127,7 @@ textArea.hidden;
 			var p_end = document.createElement('p');
 			p_end.textContent = 'です．';
 			mes.appendChild( p_end );
-			resultArea.appendChild(mes);
+			resultArea.appendChild(mes);*/
 /*
 			const headers = tableHead(vars);
 			const rows = data
