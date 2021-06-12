@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+
+	<script src="../sparql.js" defer></script>
+	
+	<script src="../suggest.js"></script>
+	    <script src="con_list.js"></script>
+	    <script>
+	      <!--
+	      // wondowのonloadイベントでSuggestを生成
+	      // (listは、list.js内で定義している)
+	      var start = function(){new Suggest.Local("INPUT", "suggest", list, {dispMax: 30, highlight: true});};
+	      window.addEventListener ?
+	        window.addEventListener('load', start, false) :
+	        window.attachEvent('onload', start);
+	        //-->
+	    </script>
+
+	<style type="text/css">
+	      <!--
+	        #suggest {
+			  margin: 10px auto;position: absolute;
+			  background-color: #FFFFFF;
+			  border: 1px solid #CCCCFF;
+			  width: 400px;
+			  height:200px;
+			  overflow: auto;
+			}
+	        #suggest div {
+	          margin: 10px auto;
+		  padding: 1px;
+	          display: block;
+	          width: 400px;
+	          overflow: hidden;
+	          white-space: nowrap;
+	        }
+	        #suggest div.select{
+	          color: #FFFFFF;
+	          background-color: #3366FF;
+	        }
+	        #suggest div.over{
+	          background-color: #99CCFF;
+	        }
+	        #suggest strong{
+	          font-weight: bold;
+	        }
+	        -->
+    </style>
+	
+	
+	
+	<link rel="stylesheet" href="../style.css">
+	<title>SPARQL Sample</title>
+</head>
+
+<body>
+	<header>
+		<h1>SPARQLによるQA[サジェスト機能付き]</h1>
+	</header>
+
+	<div class="container">
+	<div style="margin-top:4px;">
+            アニメ：<input id="INPUT" type="text" name="pattern" value="" autocomplete="off" size="80" style="display: block"/>
+            <!-- 補完候補を表示するエリア -->
+            <div id="suggest" style="display:none;"></div>
+            の
+	         <select id="propList">
+				<option value="wdt:P136">ジャンル</option>
+				<option value="wdt:P31">分類</option>
+				<option value="wdt:P373">コモンズのカテゴリ</option>
+				<option value="wdt:P156">次</option>
+				<option value="wdt:P155">前</option>
+				<option value="wdt:P144">派生元</option>
+				<option value="wdt:P910">記事の中心カテゴリ</option>
+				<option value="wdt:P361">以下の一部分</option>
+				<option value="wdt:P407">言語</option>
+				<option value="wdt:P495">本国</option>
+				<option value="wdt:P577">出版日</option>
+				<option value="wdt:P272">制作会社</option>
+				<option value="wdt:P449">放送当初のネットワーク</option>
+				<option value="wdt:P179">シリーズ</option>
+				<option value="wdt:P480">Filmaffinity識別子</option>
+				<option value="wdt:P582">終了日</option>
+				<option value="wdt:P580">開始日</option>
+				<option value="wdt:P2529">?SFD映画識別子</option>
+				<option value="wdt:P2603">キノポイスク映画識別子</option>
+				<option value="wdt:P3138">OFDb識別子</option>
+				<option value="wdt:P646">Freebase識別子</option>
+				<option value="wdt:P345">IMDb識別子</option>
+				<option value="wdt:P1811">エピソードの一覧</option>
+				<option value="wdt:P905">PORT film識別子</option>
+				<option value="wdt:P1985">Anime News Networkアニメ識別子</option>
+				<option value="wdt:P1113">話数</option>
+				<option value="wdt:P747">版</option>
+				<option value="wdt:P2002">Twitterのユーザー名</option>
+				<option value="wdt:P2013">フェイスブックID</option>
+				<option value="wdt:P6368">メディア芸術データベースアニメID</option>
+				<option value="wdt:P8670">キャラクターデザイナー</option>
+				<option value="wdt:P2003">インスタグラムのユーザー名</option>
+				<option value="wdt:P8687">ソーシャルメディアのフォロワー数</option>
+				<option value="wdt:P856">公式ウェブサイト</option>
+				<option value="wdt:P7299">MUBI映画ID</option>
+
+			</select>
+            は？
+           </div>
+
+		<div class="center-item" >
+		<input type="button" value="クエリの表示"
+       onclick="document.getElementById('query_area').style.display = 'block';">
+		<input type="button" value="非表示"
+       onclick="document.getElementById('query_area').style.display = 'none';">
+
+			<textarea id="query_area" cols="60" rows="10" style="display:none">
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+
+select DISTINCT ?s ?sLabel ?o ?oLabel
+{ 
+  ?s wdt:P31/wdt:P279* wd:Q1107 .
+  ?s rdfs:label"#INPUT#"@ja. 
+  ?s #PROP# ?o.
+SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],ja,en". }
+}
+</textarea>
+		</div>
+		<div class="center-item" >
+			<button id="send">質問する（クエリの実行）</button>
+		</div>
+	</div>
+
+	<!-- 結果ペイン -->
+	<div id="result_div" class="container"></div>
+
+<hr>
+<a href="../index.html">[ジャンル選択]</a>　
+<a href="https://www.osakac.ac.jp/labs/kozaki/KG.html">[知識グラフを利用した質問応答システム]</a>
+
+</body>
+
+</html>
