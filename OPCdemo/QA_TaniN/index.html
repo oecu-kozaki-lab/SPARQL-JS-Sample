@@ -69,37 +69,35 @@
 
 	<div class="container">
 	<div style="margin-top:4px;">
-            大学：<input id="INPUT" type="text" name="pattern" value="" autocomplete="off" size="80" style="display: block"/>
+            好きな虫：<input id="INPUT" type="text" name="pattern" value="" autocomplete="off" size="80" style="display: block"/>
             <!-- 補完候補を表示するエリア -->
             <div id="suggest" style="display:none;"></div>
             の
 	         <select id="propList">
-				<option value="wdt:P131">位置する行政区画</option>
-<option value="wdt:P17">国</option>
-<option value="wdt:P18">画像</option>
-<option value="wdt:P2002">Twitterのユーザー名</option>
-<option value="wdt:P2013">フェイスブックID</option>
-<option value="wdt:P213">ISNI</option>
-<option value="wdt:P214">VIAF識別子</option>
-<option value="wdt:P2427">GRID ID</option>
-<option value="wdt:P244">LCCN</option>
+				<option value="wdt:P18">画像</option>
 <option value="wdt:P31">分類</option>
-<option value="wdt:P3417">Quora主題識別子</option>
-<option value="wdt:P349">国立国会図書館典拠ID</option>
-<option value="wdt:P3500">リングゴールドID</option>
+<option value="wdt:P105">分類階級</option>
+<option value="wdt:P225">学名</option>
+<option value="wdt:P171">上位タクソン</option>
 <option value="wdt:P373">コモンズのカテゴリ</option>
-<option value="wdt:P3876">教育機関の卒業者のカテゴリ</option>
-<option value="wdt:P571">成立日</option>
-<option value="wdt:P625">位置座標</option>
-<option value="wdt:P6366">Microsoft Academic ID</option>
-<option value="wdt:P646">Freebase識別子</option>
-<option value="wdt:P6698">ジャパンサーチ名称ID</option>
-<option value="wdt:P6782">ROR ID</option>
-<option value="wdt:P7251">大学・高等専門学校コード</option>
-<option value="wdt:P7859">WorldCat 識別ID</option>
-<option value="wdt:P856">公式ウェブサイト</option>
-<option value="wdt:P8687">ソーシャルメディアのフォロワー数</option>
 <option value="wdt:P910">記事の中心カテゴリ</option>
+<option value="wdt:P935">コモンズのギャラリー</option>
+<option value="wdt:P646">Freebase識別子</option>
+<option value="wdt:P1296">カタルーニャ大百科事典識別子</option>
+<option value="wdt:P830">Encyclopedia of Life ID</option>
+<option value="wdt:P685">NCBI Taxonomy ID</option>
+<option value="wdt:P1343">掲載している事典</option>
+<option value="wdt:P846">GBIF-ID</option>
+<option value="wdt:P838">BioLib ID</option>
+<option value="wdt:P1420">シノニム</option>
+<option value="wdt:P1417">ブリタニカ・オンラインID</option>
+<option value="wdt:P3186">TAXREF ID</option>
+<option value="wdt:P3151">iNaturalistの分類群ID</option>
+<option value="wdt:P2924">ロシア大百科事典オンラインID</option>
+<option value="wdt:P5055">IRMNG ID</option>
+<option value="wdt:P4902">CONABIO ID</option>
+<option value="wdt:P6366">Microsoft Academic ID</option>
+
 			</select>
             は？
            </div>
@@ -112,14 +110,14 @@ PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 
 select DISTINCT ?s ?sLabel ?o ?oLabel
 { 
-  ?s wdt:P31/wdt:P279* wd:Q3918 .
+  ?s wdt:P31/wdt:P279* wd:Q16521 .
   ?s rdfs:label"#INPUT#"@ja. 
   ?s #PROP# ?o.
 SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],ja,en". }
 }
 </textarea>
 		</div>
-		<div class="center-item" >
+		<div class="center-item">
 			<button id="send">Query</button>
 		</div>
 	</div>
