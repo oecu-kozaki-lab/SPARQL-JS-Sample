@@ -83,24 +83,40 @@ textArea.hidden;
 				i++;
 				
 			}
-			var p_end = document.createElement('p');
-			p_end.textContent = 'です．';
-			mes.appendChild( p_end );
 			
-			//情報源の表示
-			if(data[0] != undefined){
-				if(data[0]['s']!=null){
-					str = data[0]['s'].value;
-					var a = document.createElement('a');
-					a.textContent = "情報源："+data[0]['sLabel'].value+"のWikidata（"+str+"）";
-					a.href= str;
-					a.target= "_blank";
-					mes.appendChild( a );
+			if(len > 0){
+				var p_end = document.createElement('p');
+				p_end.textContent = 'です．';
+				mes.appendChild( p_end );
+				
+				//情報源の表示
+				if(data[0] != undefined){
+					if(data[0]['s']!=null){
+						str = data[0]['s'].value;
+						var a = document.createElement('a');
+						a.textContent = "情報源："+data[0]['sLabel'].value+"のWikidata（"+str+"）";
+						a.href= str;
+						a.target= "_blank";
+						mes.appendChild( a );
+					}
 				}
 			}
-			
-			
-			
+			else{
+				var p_end = document.createElement('p');
+				p_end.textContent = "「"+textINPUT+'」の検索結果が見つかりませんでした.';
+				mes.appendChild( p_end );
+				p_end = document.createElement('p');
+				p_end.textContent = '選択項目を変えて試すか，下記からWikidaのデータを調べてみて下さい．';
+				mes.appendChild( p_end );
+			   
+			   var a2 = document.createElement('a');
+					a2.textContent = "->Wikidataで「"+textINPUT+"」を検索する．";
+					a2.href= "https://www.wikidata.org/w/index.php?search="+textINPUT;
+					a2.target= "_blank";
+					//mes.appendChild( document.createElement('br') );
+					mes.appendChild( a2 );
+				}
+				
 			resultArea.appendChild(mes);
 /*
 			const headers = tableHead(vars);
