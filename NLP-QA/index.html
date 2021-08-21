@@ -9,19 +9,6 @@
 	<script src="parseText.js" defer></script>
 	<script src="sparql6.js" defer></script>
 	
-	<script src="suggest.js"></script>
-	    <script src="con_list.js"></script>
-	    <script>
-	      <!--
-	      // wondowのonloadイベントでSuggestを生成
-	      // (listは、list.js内で定義している)
-	      var start = function(){new Suggest.Local("INPUT", "suggest", list, {dispMax: 30, highlight: true});};
-	      window.addEventListener ?
-	        window.addEventListener('load', start, false) :
-	        window.attachEvent('onload', start);
-	        //-->
-	    </script>
-
 <script>
 /* ------------------------------
  Loading イメージ表示関数
@@ -84,8 +71,8 @@ function removeLoading(){
 			<hr>
             
 		<div class="center-item" >
-			<input type="button" value="クエリの表示"　onclick="document.getElementById('query_area').style.display = 'block';">
-		<input type="button" value="非表示"　onclick="document.getElementById('query_area').style.display = 'none';">
+			<input type="button" value="クエリの表示" onclick="document.getElementById('query_area').style.display = 'block';">
+		<input type="button" value="非表示" onclick="document.getElementById('query_area').style.display = 'none';">
 			<textarea style="display:none" id="query_area" cols="60" rows="10">
 select DISTINCT ?s ?sLabel ?o ?oLabel
 { 
