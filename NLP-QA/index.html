@@ -84,6 +84,8 @@ function removeLoading(){
 			<hr>
             
 		<div class="center-item" >
+			<input type="button" value="クエリの表示"　onclick="document.getElementById('query_area').style.display = 'block';">
+		<input type="button" value="非表示"　onclick="document.getElementById('query_area').style.display = 'none';">
 			<textarea style="display:none" id="query_area" cols="60" rows="10">
 select DISTINCT ?s ?sLabel ?o ?oLabel
 { 
