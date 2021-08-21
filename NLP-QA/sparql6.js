@@ -104,7 +104,21 @@ textArea.hidden;
 					a.target= "_blank";
 					mes.appendChild( a );
 				}
-			}
+			}else{
+				var p_end = document.createElement('p');
+				p_end.textContent = "「"+textINPUT+'」の検索結果が見つかりませんでした.';
+				mes.appendChild( p_end );
+				p_end = document.createElement('p');
+				p_end.textContent = '選択項目を変えて試すか，下記からWikidaのデータを調べてみて下さい．';
+				mes.appendChild( p_end );
+			   
+			   var a2 = document.createElement('a');
+					a2.textContent = "->Wikidataで「"+textINPUT+"」を検索する．";
+					a2.href= "https://www.wikidata.org/w/index.php?search="+textINPUT;
+					a2.target= "_blank";
+					//mes.appendChild( document.createElement('br') );
+					mes.appendChild( a2 );
+				}
 				
 			
 			
