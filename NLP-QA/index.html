@@ -79,7 +79,7 @@ select DISTINCT ?s ?sLabel ?o ?oLabel
   ?s rdfs:label"#INPUT#"@ja. 
   ?s ?p ?o.
   ?prop wikibase:directClaim  ?p . 
-  ?prop rdfs:label "#PROP#"@ja.
+  ?prop ?p2 "#PROP#"@ja.
 
 SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],ja,en". }
 }
@@ -97,10 +97,11 @@ SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],ja,e
 	<div class="container">
 	<h3>質問文の例</h3>
 	天気の子の声優は？<br>
-	大阪電気通信大学の設立は<br>
+	大阪電気通信大学の所在地は<br>
 	寝屋川市の人口は<br>
 	ドラゴンクエストのプラットフォームは？<br>
 	スプラトゥーンのプロデューサーは？<br>
+	オオクワガタの画像は？<br>
 	</div>
 	※うまく回答が出ない場合は，検索に使う「単語」を<a href="https://www.wikidata.org/">Wikidata</a>から検索してください．
 <hr>
