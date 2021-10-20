@@ -35,7 +35,7 @@ $(window).load(function() {
 	
 	qr = sendQuery(
 		endpoint
-		,$('#query_area').val().replace(/[\n\r]/g,"").replace('#INPUT#',$('#input').val())
+		,$('#query_area').val().replace(/[\n\r]/g," ").replace('#INPUT#',$('#input').val())
 	);
 	qr.fail(
 		function (xhr, textStatus, thrownError) {
