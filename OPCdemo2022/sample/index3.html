@@ -121,6 +121,7 @@ function showData(data_i){
 
 	//フォーマット調整
 	mesText = mesText.replace('-01-01T00:00:00Z','');//日付について「年のみ」の場合は不要部分を削除
+	mesText = mesText.replace('T00:00:00Z','');//日付について「年月日のみ」の場合は不要部分を削除
 
 	return mesText;
 }
