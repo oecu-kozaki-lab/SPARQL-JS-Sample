@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>ナレッジグラフを用いたQAシステムのデモ</title>
+
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+
+<link rel="stylesheet" href="style.css">
+<script src="suggest.js"></script>
+<script src="con_list.js"></script>
+	   
+<script>
+// wondowのonloadイベントでSuggestを生成
+// (listは、list.js内で定義している)
+var start = function(){new Suggest.Local("INPUT", "suggest", list, {dispMax: 30, highlight: true});};
+window.addEventListener ?
+window.addEventListener('load', start, false) :
+window.attachEvent('onload', start);
+
+window.addEventListener('load', async () => {
+	const endpoint = "https://query.wikidata.org/sparql";
+	const textArea = document.getElementById('query_area');
+	const textArea2 = document.getElementById('query_area2');
+	const sendButton = document.getElementById('send');
+	const resultArea = document.getElementById('result_div'); 
+
+    var param = location.search;
+    if(param!=""){
+        var qid = param.replace("?id=","");
+        document.getElementById('INPUT').value = qid;
+    }
+
+	sendButton.addEventListener('click', async () => {
+		var textINPUT = document.getElementById('INPUT').value;
+		const query = textArea.value.replace( '#INPUT#', textINPUT );
+		textArea2.value=query; //置換後のクエリを保存
+		try {
+            resultArea.innerHTML="検索中...";
+			const result = await sendQuery(endpoint, query);
+			if (!result.ok) {
+                resultArea.innerText = "クエリエラーが発生しました";
+				return;
+			}		
+			const resultData = await result.json();	
+            showResult(resultData);
+		} catch (e) {
+			 alert(e.message);
+			throw e;
+		}
+	}, false);
+}, false);
+
+/*
+	* クエリ結果の表示処理
+	*/
+function showResult(resultData){
+	const data = resultData.results.bindings;
+	var i=0;
+	var len = data.length;
+
+	var textINPUT = document.getElementById('INPUT').value;
+	var mesText = "" ;
+	if(data[0]['s']!=null){
+		mesText+='<h2 style="background:#afeeee">'+textINPUT+'<font size="3">（Wikidata ID:<a href="'+data[i]['s'].value +'">'
+            +data[i]['s'].value.replace('http://www.wikidata.org/entity/',"")
+            +'</a>）</font></h2>';
+	}
+
+	//表示するプロパティの順番を設定
+	var props = ["P18","P367","P47","P2046","P527","P242"];
+	var propLen = props.length;
+	
+	for(var j=0 ;j<propLen;j++){	
+		for(var i=0 ;i<len;i++){
+			if(data[i]['p'].value.endsWith(props[j])){	
+				mesText += showData(data[i]);
+			}
+		}
+    }
+	//順番を指定していないプロパティの表示
+	for(var i=0 ;i<len;i++){
+		if(props.indexOf(data[i]['p'].value.replace("http://www.wikidata.org/prop/direct/",""))<0){	
+			//console.log(data[i]['p'].value);
+			mesText += showData(data[i]);
+		}
+	}
+	
+	const resultArea = document.getElementById('result_div');
+	resultArea.innerHTML='<h2>クエリ結果</h2>'+mesText;
+}
+
+//データ1行分の表示処理を関数として独立させた
+function showData(data_i){
+	var mesText = "" ;
+	if(data_i['propLabel']!=null){//wdt:XXXの述語処理
+			if(data_i['o'].value.startsWith('http://www.wikidata.org/entity/')){//目的語がwd:XX
+				mesText += data_i['propLabel'].value+' - <b>'+
+						data_i['oLabel'].value + '</b>' +
+						'<a href="'+data_i['o'].value + '" target="_blank">'+
+						'['+data_i['o'].value.replace('http://www.wikidata.org/entity/','')+
+						']</a><br>';
+			}
+			else if(data_i['o'].value.startsWith('http')){//目的語がURL
+                if(data_i['o'].value.endsWith('.jpg')
+					|| data_i['o'].value.endsWith('.JPG')
+					|| data_i['o'].value.endsWith('.png')
+                    || data_i['o'].value.endsWith('.svg')){
+                    mesText += data_i['propLabel'].value+'<br>'+
+						'<img src="'+data_i['o'].value +'" width="350">'+
+						'</img><br>';
+                }
+                else{
+				    mesText += data_i['propLabel'].value+' - '+
+						'<a href="'+data_i['o'].value +'" target="_blank">'+
+						data_i['oLabel'].value+'</a><br>';
+                    }
+			}
+            else{//目的語がそれ以外
+				mesText += data_i['propLabel'].value+' - '+
+						data_i['oLabel'].value+'<br>';
+			}
+		}
+	else{//wdt:XXX以外の述語の処理
+		mesText += data_i['p'].value+' - '+
+					data_i['oLabel'].value+'</a><br>';
+	}
+
+	//フォーマット調整
+	mesText = mesText.replace('-01-01T00:00:00Z','');//日付について「年のみ」の場合は不要部分を削除
+	mesText = mesText.replace('T00:00:00Z','');//日付について「年月日のみ」の場合は不要部分を削除
+
+	return mesText;
+}
+
+/*
+	* endpointで指定されたSPARQLエンドポイントにクエリを送信
+	*/
+function sendQuery(endpoint, sparql) {
+	const url = endpoint + "?" + "query="+encodeURIComponent(sparql)+"&output=json"
+	const headers = {
+		Accept: 'application/sparql-results+json'
+	}
+	return fetch(url, {
+		method: 'GET',
+		headers,
+		mode: 'cors',
+		cache: 'no-cache',
+	});
+}
+</script>
+</head>
+
+<body>
+	<header>
+		<h1>ナレッジグラフを用いたQAシステムのデモ</h1>
+	</header>
+
+	<div class="container">
+	<div style="margin-top:4px;">
+            <b style="font-size: x-large;">星座</b><br>
+			：例）オリオン座<input id="INPUT" type="text" name="pattern" value="" autocomplete="off" size="80" style="display: block"/>
+            <!-- 補完候補を表示するエリア -->
+            <div id="suggest" style="display:none;"></div>	
+	</div>
+
+	<div class="center-item" >
+	<input type="button" id="dis_b" value="クエリの表示"
+	onclick="document.getElementById('query').style.display = 'block';
+		document.getElementById('query2').style.display = 'block';
+		document.getElementById('dis_b').style.display = 'none';
+		document.getElementById('none_b').style.display = 'block';">
+	<input type="button" id="none_b"  value="非表示" style="display:none"
+	onclick="document.getElementById('query').style.display = 'none';
+		document.getElementById('query2').style.display = 'none';
+		document.getElementById('dis_b').style.display = 'block';
+		document.getElementById('none_b').style.display = 'none';">
+
+	<div id="query" style="display:none">
+		置き換え前のクエリ：<br>
+	<textarea id="query_area" cols="60" rows="10">
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+	
+select DISTINCT ?s ?o ?oLabel ?p ?prop ?propLabel
+where{
+	?s wdt:P31 wd:Q8928 .
+	?s ?lbl "#INPUT#"@ja. 	
+	?s ?p ?o.
+	FILTER(?p=wdt:P18
+		|| ?p=wdt:P367
+		|| ?p=wdt:P47
+		|| ?p=wdt:P2046
+		|| ?p=wdt:P527
+		|| ?p=wdt:P242)
+	OPTIONAL{?prop wikibase:directClaim ?p.}
+	SERVICE wikibase:label { bd:serviceParam wikibase:language "ja,en". }
+}
+	</textarea>
+	</div>
+	<div id="query2" style="display:none">
+		置き換え済みのクエリ：<br>
+		<textarea id="query_area2" cols="60" rows="10" >
+
+		</textarea>
+	</div>
+	<div class="center-item" >
+		<button id="send">質問する（クエリの実行）</button>
+	</div>
+</div>
+
+<!-- 結果ペイン -->
+<div id="result_div" class="container"></div>
+
+<hr>
+<a href="../index.html">[ジャンル選択に戻る]</a>
+
+</body>
+
+</html>
