@@ -64,30 +64,67 @@ function showResult(resultData){
 	var textINPUT = document.getElementById('INPUT').value;
 	var mesText = "" ;
 	if(data[0]['s']!=null){
-		mesText+='<h2><a href="'+data[i]['s'].value +'">'+textINPUT+'</a></h2>';
+		mesText+='<h2 style="background:#afeeee">'+textINPUT+'<font size="3">（Wikidata ID:<a href="'+data[i]['s'].value +'">'
+            +data[i]['s'].value.replace('http://www.wikidata.org/entity/',"")
+            +'</a>）</font></h2>';
 	}
-	while(i < len){
-		if(data[i]['propLabel']!=null){
-			if(data[i]['o'].value.startsWith('http://www.wikidata.org/entity/')){
-				mesText += data[i]['propLabel'].value+' - '+
-						'<a href="'+data[i]['o'].value +'">'+
-						data[i]['oLabel'].value+'</a><br>';
-			}else if(data[i]['o'].value.startsWith('http')){
-				mesText += data[i]['propLabel'].value+' - '+
-						'<a href="'+data[i]['o'].value +'" target="_blank">'+
-						data[i]['oLabel'].value+'</a><br>';
+	var props = ["P225","P105","P171","P18"];
+	var propLen = props.length;
+	
+	for(var j=0 ;j<propLen;j++){	
+		for(var i=0 ;i<len;i++){
+			if(data[i]['p'].value.endsWith(props[j])){	
+				mesText += showData(data[i]);
 			}
 		}
-		else{
-			mesText += data[i]['p'].value+' - '+
-						data[i]['oLabel'].value+'</a><br>';
+    }
+	//順番を指定していないプロパティの表示
+	for(var i=0 ;i<len;i++){
+		if(props.indexOf(data[i]['p'].value.replace("http://www.wikidata.org/prop/direct/",""))<0){	
+			//console.log(data[i]['p'].value);
+			mesText += showData(data[i]);
 		}
-		i++;				
 	}
+	
 	const resultArea = document.getElementById('result_div');
 	resultArea.innerHTML='<h2>クエリ結果</h2>'+mesText;
 }
-
+	
+function showData(data_i){
+	var mesText = "" ;
+	if(data_i['propLabel']!=null){//wdt:XXXの述語処理
+			if(data_i['o'].value.startsWith('http://www.wikidata.org/entity/')){//目的語がwd:XX
+				mesText += data_i['propLabel'].value+' - <b>'+
+						data_i['oLabel'].value + '</b>' +
+						'<a href="'+data_i['o'].value + '" target="_blank">'+
+						'['+data_i['o'].value.replace('http://www.wikidata.org/entity/','')+
+						']</a><br>';
+			}
+			else if(data_i['o'].value.startsWith('http')){//目的語がURL
+                if(data_i['o'].value.endsWith('.jpg')
+					|| data_i['o'].value.endsWith('.JPG')
+					|| data_i['o'].value.endsWith('.png')){
+                    mesText += data_i['propLabel'].value+'<br>'+
+						'<img src="'+data_i['o'].value +'" width="500">'+
+						'</img><br>';
+                }
+                else{
+				    mesText += data_i['propLabel'].value+' - '+
+						'<a href="'+data_i['o'].value +'" target="_blank">'+
+						data_i['oLabel'].value+'</a><br>';
+                    }
+			}
+            else{//目的語がそれ以外
+				mesText += data_i['propLabel'].value+' - '+
+						data_i['oLabel'].value+'<br>';
+			}
+		}
+	else{//wdt:XXX以外の述語の処理
+		mesText += data_i['p'].value+' - '+
+					data_i['oLabel'].value+'</a><br>';
+	}
+	return mesText;
+}
 /*
 	* endpointで指定されたSPARQLエンドポイントにクエリを送信
 	*/
@@ -140,7 +177,8 @@ where{
 	?s ?p ?o.
 	FILTER(?p=wdt:P225
 		|| ?p=wdt:P105
-		|| ?p=wdt:P171)
+		|| ?p=wdt:P171
+		|| ?p=wdt:P18)
 #FILTER(!regex(str(?o),"http://www.wikidata.org/entity/statement/"))
 #FILTER(lang(?o)="ja"||lang(?o)="en"||!isLiteral(?o))
 	OPTIONAL{?prop wikibase:directClaim ?p.}

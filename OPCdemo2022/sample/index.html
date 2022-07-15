@@ -45,6 +45,7 @@ window.addEventListener('load', async () => {
 				return;
 			}		
 			const resultData = await result.json();	
+			//alert(JSON.stringify(resultData));
             showResult(resultData);
 		} catch (e) {
 			 alert(e.message);
