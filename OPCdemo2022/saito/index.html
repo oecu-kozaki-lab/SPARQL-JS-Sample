@@ -25,6 +25,7 @@
 		window.addEventListener('load', async () => {
 			const endpoint = "https://query.wikidata.org/sparql";
 			const textArea = document.getElementById('query_area');
+			const textArea2 = document.getElementById('query_area2');
 			const sendButton = document.getElementById('send');
 			const resultArea = document.getElementById('result_div');
 
@@ -37,6 +38,7 @@
 			sendButton.addEventListener('click', async () => {
 				var textINPUT = document.getElementById('INPUT').value;
 				const query = textArea.value.replace('#INPUT#', textINPUT);
+				textArea2.value = query; //置換後のクエリを保存
 				try {
 					resultArea.innerHTML = "検索中...";
 					const result = await sendQuery(endpoint, query);
@@ -64,28 +66,73 @@
 			var textINPUT = document.getElementById('INPUT').value;
 			var mesText = "";
 			if (data[0]['s'] != null) {
-				mesText += '<h2><a href="' + data[i]['s'].value + '">' + textINPUT + '</a></h2>';
+				mesText += '<h2 style="background:#afeeee">' + textINPUT + '<font size="3">（Wikidata ID:<a href="' + data[i]['s'].value + '">'
+					+ data[i]['s'].value.replace('http://www.wikidata.org/entity/', "")
+					+ '</a>）</font></h2>';
 			}
-			while (i < len) {
-				if (data[i]['propLabel'] != null) {
-					if (data[i]['o'].value.startsWith('http://www.wikidata.org/entity/')) {
-						mesText += data[i]['propLabel'].value + ' - ' +
-							'<a href="' + data[i]['o'].value + '">' +
-							data[i]['oLabel'].value + '</a><br>';
-					} else if (data[i]['o'].value.startsWith('http')) {
-						mesText += data[i]['propLabel'].value + ' - ' +
-							'<a href="' + data[i]['o'].value + '" target="_blank">' +
-							data[i]['oLabel'].value + '</a><br>';
+
+			//表示するプロパティの順番を設定
+			var props = ["P50", "P110", "P136", "P674", "P571", "P856", "P123"];
+			var propLen = props.length;
+
+			for (var j = 0; j < propLen; j++) {
+				for (var i = 0; i < len; i++) {
+					if (data[i]['p'].value.endsWith(props[j])) {
+						mesText += showData(data[i]);
 					}
 				}
-				else {
-					mesText += data[i]['p'].value + ' - ' +
-						data[i]['oLabel'].value + '</a><br>';
-				}
-				i++;
 			}
+			//順番を指定していないプロパティの表示
+			// for(var i=0 ;i<len;i++){
+			// 	if(props.indexOf(data[i]['p'].value.replace("http://www.wikidata.org/prop/direct/"))<0){	
+			// 		mesText += showData(data[i]);
+			// 	}
+			// }
+
 			const resultArea = document.getElementById('result_div');
 			resultArea.innerHTML = '<h2>クエリ結果</h2>' + mesText;
+		}
+
+		//データ1行分の表示処理を関数として独立させた
+		function showData(data_i) {
+			var mesText = "";
+			if (data_i['propLabel'] != null) {//wdt:XXXの述語処理
+				if (data_i['o'].value.startsWith('http://www.wikidata.org/entity/')) {//目的語がwd:XX
+					mesText += data_i['propLabel'].value + ' - <b>' +
+						data_i['oLabel'].value + '</b>' +
+						'<a href="' + data_i['o'].value + '" target="_blank">' +
+						'[' + data_i['o'].value.replace('http://www.wikidata.org/entity/', '') +
+						']</a><br>';
+				}
+				else if (data_i['o'].value.startsWith('http')) {//目的語がURL
+					if (data_i['o'].value.endsWith('.jpg')
+						|| data_i['o'].value.endsWith('.JPG')
+						|| data_i['o'].value.endsWith('.png')) {
+						mesText += data_i['propLabel'].value + '<br>' +
+							'<img src="' + data_i['o'].value + '" width="500">' +
+							'</img><br>';
+					}
+					else {
+						mesText += data_i['propLabel'].value + ' - ' +
+							'<a href="' + data_i['o'].value + '" target="_blank">' +
+							data_i['oLabel'].value + '</a><br>';
+					}
+				}
+				else {//目的語がそれ以外
+					mesText += data_i['propLabel'].value + ' - ' +
+						data_i['oLabel'].value + '<br>';
+				}
+			}
+			else {//wdt:XXX以外の述語の処理
+				mesText += data_i['p'].value + ' - ' +
+					data_i['oLabel'].value + '</a><br>';
+			}
+
+			//フォーマット調整
+			mesText = mesText.replace('-01-01T00:00:00Z', '');//日付について「年のみ」の場合は不要部分を削除
+			mesText = mesText.replace('T00:00:00Z', '');//日付について「年月日のみ」の場合は不要部分を削除
+
+			return mesText;
 		}
 
 		/*
@@ -113,18 +160,26 @@
 
 	<div class="container">
 		<div style="margin-top:4px;">
-			ライトノベル：(例：ソードアートオンライン)<input id="INPUT" type="text" name="pattern" value="" autocomplete="off" size="80"
+			<b style="font-size: x-large;">ライトノベル</b><br>
+			：例）ソードアート・オンライン<input id="INPUT" type="text" name="pattern" value="" autocomplete="off" size="80"
 				style="display: block" />
 			<!-- 補完候補を表示するエリア -->
 			<div id="suggest" style="display:none;"></div>
 		</div>
 
 		<div class="center-item">
-			<input type="button" value="クエリの表示"
-				onclick="document.getElementById('query_area').style.display = 'block';">
-			<input type="button" value="非表示" onclick="document.getElementById('query_area').style.display = 'none';">
+			<input type="button" id="dis_b" value="クエリの表示" onclick="document.getElementById('query').style.display = 'block';
+		document.getElementById('query2').style.display = 'block';
+		document.getElementById('dis_b').style.display = 'none';
+		document.getElementById('none_b').style.display = 'block';">
+			<input type="button" id="none_b" value="非表示" style="display:none" onclick="document.getElementById('query').style.display = 'none';
+		document.getElementById('query2').style.display = 'none';
+		document.getElementById('dis_b').style.display = 'block';
+		document.getElementById('none_b').style.display = 'none';">
 
-			<textarea id="query_area" cols="60" rows="10" style="display:none">
+			<div id="query" style="display:none">
+				置き換え前のクエリ：<br>
+				<textarea id="query_area" cols="60" rows="10">
 PREFIX wd: <http://www.wikidata.org/entity/>
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 PREFIX wikibase: <http://wikiba.se/ontology#>
@@ -132,30 +187,37 @@ PREFIX wikibase: <http://wikiba.se/ontology#>
 select DISTINCT ?s ?o ?oLabel ?p ?prop ?propLabel
 where{
 	?s wdt:P31/wdt:P279* wd:Q747381 .
-	?s rdfs:label"#INPUT#"@ja. 	
+	?s ?ldl "#INPUT#"@ja. 	
 	?s ?p ?o.
 	FILTER(?p=wdt:P136
 		|| ?p=wdt:P495
-		|| ?p=wdt:P921
 		|| ?p=wdt:P50
-		|| ?p=wdt:P856)
-#FILTER(!regex(str(?o),"http://www.wikidata.org/entity/statement/"))
-#FILTER(lang(?o)="ja"||lang(?o)="en"||!isLiteral(?o))
+		|| ?p=wdt:P856
+		|| ?p=wdt:P674
+		|| ?p=wdt:P110
+		|| ?p=wdt:P123)
 	OPTIONAL{?prop wikibase:directClaim ?p.}
 	SERVICE wikibase:label { bd:serviceParam wikibase:language "ja,en". }
 }
+ORDER BY ?prop
 	</textarea>
-		</div>
-		<div class="center-item">
-			<button id="send">質問する（クエリの実行）</button>
-		</div>
-	</div>
+			</div>
+			<div id="query2" style="display:none">
+				置き換え済みのクエリ：<br>
+				<textarea id="query_area2" cols="60" rows="10">
 
-	<!-- 結果ペイン -->
-	<div id="result_div" class="container"></div>
+		</textarea>
+			</div>
+			<div class="center-item">
+				<button id="send">質問する（クエリの実行）</button>
+			</div>
+		</div>
 
-	<hr>
-	<a href="../index.html">[ジャンル選択に戻る]</a>
+		<!-- 結果ペイン -->
+		<div id="result_div" class="container"></div>
+
+		<hr>
+		<a href="../index.html">[ジャンル選択に戻る]</a>
 
 </body>
 

@@ -12,7 +12,7 @@
 
 <link rel="stylesheet" href="style.css">
 <script src="suggest.js"></script>
-<script src="con_list.js"></script>
+<script src="sakana_list.js"></script>
 	   
 <script>
 // wondowのonloadイベントでSuggestを生成
@@ -36,7 +36,7 @@ window.addEventListener('load', async () => {
 
 	sendButton.addEventListener('click', async () => {
 		var textINPUT = document.getElementById('INPUT').value;
-		const query = textArea.value.replace( '#INPUT#', textINPUT );
+		const query = textArea.value.replaceAll( '#INPUT#', textINPUT );
 		try {
             resultArea.innerHTML="検索中...";
 			const result = await sendQuery(endpoint, query);
@@ -131,14 +131,16 @@ PREFIX wikibase: <http://wikiba.se/ontology#>
 	
 select DISTINCT ?s ?o ?oLabel ?p ?prop ?propLabel
 where{
-	?s wdt:P31/wdt:P279* wd:Q3918 .
-	?s rdfs:label"#INPUT#"@ja. 	
+	?s wdt:P171* ?tax .
+	FILTER(?tax=wd:Q127282
+	|| ?tax=wd:168422
+	|| ?tax=wd:Q59166
+	|| ?tax=wd:Q25371)
+	{?s rdfs:label"#INPUT#"@ja.}union{?s rdfs:label"#INPUT#"@en.}	
 	?s ?p ?o.
-	FILTER(?p=wdt:P131
-		|| ?p=wdt:P17
-		|| ?p=wdt:P18
-		|| ?p=wdt:P17
-		|| ?p=wdt:P856)
+	FILTER(?p=wdt:P225
+		|| ?p=wdt:P105
+		|| ?p=wdt:P171)
 #FILTER(!regex(str(?o),"http://www.wikidata.org/entity/statement/"))
 #FILTER(lang(?o)="ja"||lang(?o)="en"||!isLiteral(?o))
 	OPTIONAL{?prop wikibase:directClaim ?p.}
