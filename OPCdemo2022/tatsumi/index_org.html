@@ -64,66 +64,37 @@ function showResult(resultData){
 	var textINPUT = document.getElementById('INPUT').value;
 	var mesText = "" ;
 	if(data[0]['s']!=null){
-		mesText+='<h2 style="background:#afeeee">'+textINPUT+'<font size="3">（Wikidata ID:<a href="'+data[i]['s'].value +'">'
-            +data[i]['s'].value.replace('http://www.wikidata.org/entity/',"")
-            +'</a>）</font></h2>';
+		mesText+='<h2><a href="'+data[i]['s'].value +'">'+textINPUT+'</a></h2>';
 	}
-
-	//表示するプロパティの順番を設定
-	var props = ["P17","P131","P18","P856","P571"];
-	var propLen = props.length;
-	
-	for(var j=0 ;j<propLen;j++){	
-		for(var i=0 ;i<len;i++){
-			if(data[i]['p'].value.endsWith(props[j])){	
-				mesText += showData(data[i]);
+	while(i < len){
+		if(data[i]['propLabel']!=null){
+			if(data[i]['o'].value.startsWith('http://www.wikidata.org/entity/')){
+				mesText += data[i]['propLabel'].value+' - '+
+						'<a href="'+data[i]['o'].value +'">'+
+						data[i]['oLabel'].value+'</a><br>';
 			}
-		}
-    }
-	
-	const resultArea = document.getElementById('result_div');
-	resultArea.innerHTML='<h2>クエリ結果</h2>'+mesText;
-}
-
-//データ1行分の表示処理を関数として独立させた
-function showData(data_i){
-	var mesText = "" ;
-	if(data_i['propLabel']!=null){//wdt:XXXの述語処理
-			if(data_i['o'].value.startsWith('http://www.wikidata.org/entity/')){//目的語がwd:XX
-				mesText += data_i['propLabel'].value+' - <b>'+
-						data_i['oLabel'].value + '</b>' +
-						'<a href="'+data_i['o'].value + '" target="_blank">'+
-						'['+data_i['o'].value.replace('http://www.wikidata.org/entity/','')+
-						']</a><br>';
-			}
-			else if(data_i['o'].value.startsWith('http')){//目的語がURL
-                if(data_i['o'].value.endsWith('.jpg')
-                    || data_i['o'].value.endsWith('.png')){
-                    mesText += data_i['propLabel'].value+'<br>'+
-						'<img src="'+data_i['o'].value +'" width="500">'+
+			else if(data[i]['o'].value.startsWith('http')){
+				if(data[i]['o'].value.endsWith('.jpg')
+                    || data[i]['o'].value.endsWith('.png')){
+                    mesText += data[i]['propLabel'].value+'<br>'+
+						'<img src="'+data[i]['o'].value +'" width="500">'+
 						'</img><br>';
                 }
-                else{
-				    mesText += data_i['propLabel'].value+' - '+
-						'<a href="'+data_i['o'].value +'" target="_blank">'+
-						data_i['oLabel'].value+'</a><br>';
-                    }
-			}
-            else{//目的語がそれ以外
-				mesText += data_i['propLabel'].value+' - '+
-						data_i['oLabel'].value+'<br>';
+				else{
+				mesText += data[i]['propLabel'].value+' - '+
+						'<a href="'+data[i]['o'].value +'" target="_blank">'+
+						data[i]['oLabel'].value+'</a><br>';
+				}
 			}
 		}
-	else{//wdt:XXX以外の述語の処理
-		mesText += data_i['p'].value+' - '+
-					data_i['oLabel'].value+'</a><br>';
+		else{
+			mesText += data[i]['p'].value+' - '+
+						data[i]['oLabel'].value+'</a><br>';
+		}
+		i++;				
 	}
-
-	//フォーマット調整
-	mesText = mesText.replace('-01-01T00:00:00Z','');//日付について「年のみ」の場合は不要部分を削除
-	mesText = mesText.replace('T00:00:00Z','');//日付について「年月日のみ」の場合は不要部分を削除
-
-	return mesText;
+	const resultArea = document.getElementById('result_div');
+	resultArea.innerHTML='<h2>クエリ結果</h2>'+mesText;
 }
 
 /*
@@ -151,7 +122,7 @@ function sendQuery(endpoint, sparql) {
 
 	<div class="container">
 	<div style="margin-top:4px;">
-            大学：例）大阪電気通信大学<input id="INPUT" type="text" name="pattern" value="" autocomplete="off" size="80" style="display: block"/>
+            バンド名：（例　RADWIMPS）<input id="INPUT" type="text" name="pattern" value="" autocomplete="off" size="80" style="display: block"/>
             <!-- 補完候補を表示するエリア -->
             <div id="suggest" style="display:none;"></div>	
 	</div>
@@ -169,19 +140,19 @@ PREFIX wikibase: <http://wikiba.se/ontology#>
 	
 select DISTINCT ?s ?o ?oLabel ?p ?prop ?propLabel
 where{
-	?s wdt:P31/wdt:P279* wd:Q3918 .
+	?s wdt:P31/wdt:P279* wd:Q215380 .
 	?s rdfs:label"#INPUT#"@ja. 	
 	?s ?p ?o.
-	FILTER(?p=wdt:P131
-		|| ?p=wdt:P17
+	FILTER(?p=wdt:P264
+		|| ?p=wdt:P495
 		|| ?p=wdt:P18
-		|| ?p=wdt:P856
-        || ?p=wdt:P571)
+		|| ?p=wdt:P527
+		|| ?p=wdt:P571)
 #FILTER(!regex(str(?o),"http://www.wikidata.org/entity/statement/"))
 #FILTER(lang(?o)="ja"||lang(?o)="en"||!isLiteral(?o))
 	OPTIONAL{?prop wikibase:directClaim ?p.}
 	SERVICE wikibase:label { bd:serviceParam wikibase:language "ja,en". }
-}
+}ORDER BY ?prop
 	</textarea>
 	</div>
 	<div class="center-item" >

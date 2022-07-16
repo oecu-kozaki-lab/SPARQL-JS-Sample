@@ -21,6 +21,13 @@ header > h1 {
     border: solid 1px #ccc;
 }
 
+#query_area2 {
+  resize: none;
+  width: 90vw;
+  height: 30vh;
+  border: solid 1px #ccc;
+}
+
 button#send {
     border: none;
     border-radius: 3px;

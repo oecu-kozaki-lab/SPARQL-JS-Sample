@@ -64,7 +64,7 @@ function showResult(resultData){
 	var textINPUT = document.getElementById('INPUT').value;
 	var mesText = "" ;
 	if(data[0]['s']!=null){
-		mesText+='<h2>'+textINPUT+'<font size="3">（Wikidata ID:<a href="'+data[i]['s'].value +'">'
+		mesText+='<h2>'+textINPUT+'<font size="3">（Wikidata ID:<a href="'+data[i]['s'].value +'" target="kg">'
             +data[i]['s'].value.replace('http://www.wikidata.org/entity/',"")
             +'</a>）</font></h2>';
 	}
@@ -78,7 +78,7 @@ function showResult(resultData){
                 if(data[i]['o'].value.endsWith('.jpg')
                     || data[i]['o'].value.endsWith('.png')){
                     mesText += data[i]['propLabel'].value+'<br>'+
-						'<img src="'+data[i]['o'].value +'" width="500">'+
+						'<img src="'+data[i]['o'].value +'" target="_blank">'+
 						'</img><br>';
                 }
                 else{
@@ -99,7 +99,7 @@ function showResult(resultData){
 		i++;				
 	}
 	const resultArea = document.getElementById('result_div');
-	resultArea.innerHTML='<h2>クエリ結果</h2>'+mesText;
+	resultArea.innerHTML='<h2>クエリ結果</h2>'+mesText+'<iframe id="kg" name="kg" width=900" height="500"></iframe>;';
 }
 
 /*
@@ -118,6 +118,7 @@ function sendQuery(endpoint, sparql) {
 	});
 }
 </script>
+
 </head>
 
 <body>
@@ -127,7 +128,7 @@ function sendQuery(endpoint, sparql) {
 
 	<div class="container">
 	<div style="margin-top:4px;">
-            大学：<input id="INPUT" type="text" name="pattern" value="" autocomplete="off" size="80" style="display: block"/>
+            漫画：<input id="INPUT" type="text" name="pattern" value="" autocomplete="off" size="80" style="display: block"/>
             <!-- 補完候補を表示するエリア -->
             <div id="suggest" style="display:none;"></div>	
 	</div>
@@ -142,17 +143,17 @@ function sendQuery(endpoint, sparql) {
 PREFIX wd: <http://www.wikidata.org/entity/>
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 	
 select DISTINCT ?s ?o ?oLabel ?p ?prop ?propLabel
 where{
-	?s wdt:P31/wdt:P279* wd:Q3918 .
+	?s wdt:P31/wdt:P279* wd:Q8274 .
 	?s rdfs:label"#INPUT#"@ja. 	
 	?s ?p ?o.
-	FILTER(?p=wdt:P131
-		|| ?p=wdt:P17
-		|| ?p=wdt:P18
-		|| ?p=wdt:P856
-        || ?p=wdt:P571)
+	FILTER(?p=wdt:P1476
+		|| ?p=wdt:P123
+		|| ?p=wdt:P154
+		|| ?p=wdt:P856)
 #FILTER(!regex(str(?o),"http://www.wikidata.org/entity/statement/"))
 #FILTER(lang(?o)="ja"||lang(?o)="en"||!isLiteral(?o))
 	OPTIONAL{?prop wikibase:directClaim ?p.}
@@ -169,7 +170,7 @@ where{
 <div id="result_div" class="container"></div>
 
 <hr>
-<a href="../index.html">[ジャンル選択に戻る]</a>
+<a href="../index.html">[ファイルにアクセスできませんでしたに戻る]</a>
 
 </body>
 

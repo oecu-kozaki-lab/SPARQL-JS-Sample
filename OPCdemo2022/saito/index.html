@@ -66,7 +66,7 @@
 			var textINPUT = document.getElementById('INPUT').value;
 			var mesText = "";
 			if (data[0]['s'] != null) {
-				mesText += '<h2 style="background:#afeeee">' + textINPUT + '<font size="3">（Wikidata ID:<a href="' + data[i]['s'].value + '">'
+				mesText += '<h2 style="background:#afeeee">' + data[i]['sLabel'].value + '<font size="3">（Wikidata ID:<a href="' + data[i]['s'].value + '">'
 					+ data[i]['s'].value.replace('http://www.wikidata.org/entity/', "")
 					+ '</a>）</font></h2>';
 			}
@@ -184,7 +184,7 @@ PREFIX wd: <http://www.wikidata.org/entity/>
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 PREFIX wikibase: <http://wikiba.se/ontology#>
 	
-select DISTINCT ?s ?o ?oLabel ?p ?prop ?propLabel
+select DISTINCT ?s ?sLabel ?o ?oLabel ?p ?prop ?propLabel
 where{
 	?s wdt:P31/wdt:P279* wd:Q747381 .
 	?s ?ldl "#INPUT#"@ja. 	
