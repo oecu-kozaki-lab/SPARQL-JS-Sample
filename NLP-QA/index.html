@@ -76,10 +76,10 @@ function removeLoading(){
 			<textarea style="display:none" id="query_area" cols="60" rows="10">
 select DISTINCT ?s ?sLabel ?o ?oLabel
 { 
-  ?s rdfs:label"#INPUT#"@ja. 
+  ?s rdfs:label|skos:altLabel "#INPUT#"@ja. 
   ?s ?p ?o.
   ?prop wikibase:directClaim  ?p . 
-  ?prop ?p2 "#PROP#"@ja.
+  ?prop rdfs:label|skos:altLabel "#PROP#"@ja.
 
 SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],ja,en". }
 }
