@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Wikidataを用いた検索システム</title>
+
+<link rel="stylesheet" href="style.css">
+<script src="KGSearch.js"></script>     <!-- KG検索用のライブラリ読み込み -->
+<script src="options.js"></script> <!-- KG検索設定ファイルの読み込み -->
+
+<script>
+//詳細表示ページ用の設定
+const keylink = "item";	//リンクのkeyとする変数
+const detail_html = "details.html"; //詳細表示用のHTMLファイル
+
+window.addEventListener('load', () => {
+    setButtons();
+}, false);
+
+//検索に用いるSPARQLクエリを生成し，実行する
+async function makeQuery(){
+    const endpoint = "https://query.wikidata.org/sparql";
+	let query = document.getElementById('query_area').value;
+    const resultArea = document.getElementById('result_div');
+
+    const delailsArea = document.getElementById('details_div');
+    delailsArea.innerHTML='<iframe src="" name="details"style="width: 400px; height: 80hv;"></iframe>';
+
+    query = await makeSPARQLquery(query);
+    document.getElementById('query_area2').value = query;
+
+    //SPARQLクエリの実行
+    dispLoading("検索中...");			
+	const resultData = await sendSPARQLQuery(endpoint, query);
+    removeLoading();
+
+    document.getElementById('result_box').style.display="flex";
+    document.getElementById('resjson_area').value = JSON.stringify(resultData,null,'  ');
+    showResult(resultData,resultArea); //クエリ結果の表示【テーブル表示用】
+}
+</script>
+</head>
+
+<body>
+<header id="head" >
+	<h1>Wikidataを用いた検索システム</h1>
+</header>
+
+<!-- 検索条件設定の領域 -->
+<div id="menu" class="container">
+	<div style="margin-top:4px;">
+        <b>Wikidata全体</b>の検索<br>
+		<input id="LABEL" type="text" value="" size="40"/>         
+        <input type="button" id="send" value="検索の実行" style="margin-top:8px; "><br>
+	<hr>
+        <input type="button" id="showQueryCond" value="▼詳細検索条件">
+        <input type="button" id="hideQueryCond" value="△詳細検索条件" style="display:none">
+        <div id="QueryCond_div" style="display:none">
+            <div>
+            <b>ラベルの検索設定</b>:<br>
+                <label><input type="radio" id="LabelFull" name="labelType" value="full">完全一致</label>
+                <label><input type="radio" id="LabelForward" name="labelType" value="forward">前方一致</label>
+                <label><input type="radio" id="LabelAmbi" name="labelType" value="ambi" checked>あいまい検索</label>
+                <!--「部分一致」はSPARQLクエリを利用するため処理が重く、
+                    「Wikidata全体」を対象とするとタイムアウトとなるので使用しない。（検索対象を絞ると利用可） -->
+                <!-- <label><input type="radio" id="LabelPart" name="labelType" value="part">部分一致</label> -->
+            </div>
+            <b>検索条件</b>:<br>
+            <div id="search_cond_div"></div>
+            <hr>
+            <input type="button" id="dispQuery" value="▼クエリの表示">
+            <input type="button" id="hideQuery"  value="△クエリの非表示" style="display:none">
+        </div>
+    </div>
+    <div id="query" style="display:none">
+        <b>検索項目設定</b>：<br>
+        <div id="search_prop_div"></div>
+        <b>設定用ファイル</b>：<br>
+        <textarea id="settings_area" class="t_area" rows="10" ></textarea><br>
+        <b>置き換え前のクエリ</b>：<br>
+<textarea id="query_area" class="t_area" rows="10">
+select DISTINCT ?item ?itemLabel
+where{
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "ja,en". }
+}
+LIMIT 50		
+</textarea>
+        <br>
+        <b>置き換え後のクエリ</b>：<br>
+        <textarea id="query_area2" class="t_area" rows="10" ></textarea><br>
+        <b>クエリ実行結果の戻り値(JSON形式）</b>：<br>
+        <textarea id="resjson_area"  class="t_area" rows="10" ></textarea>
+    </div>
+</div>
+
+<!-- 結果表示用の領域 -->
+<div id="result_box" style=" display: none;  ">
+	<div>
+        <div id="result_div"  class="result_div" > </div>
+        <input type="button" id="cont" value="続きを検索" style=" display: none;" >
+    </div>
+	<!-- 詳細表示画面の領域 -->
+	<div id="details_div" >
+		<iframe src="" name="details"style="width: 400px; height: 80hv;"></iframe>
+	</div>
+</div>
+<hr>
+</body>
+</html>

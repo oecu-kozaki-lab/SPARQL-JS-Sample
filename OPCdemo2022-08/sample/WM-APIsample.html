@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Wikidataを用いた検索システム</title>
+
+<link rel="stylesheet" href="style.css">
+<!-- KG検索用のライブラリ読み込み -->
+<script src="KGSearch.js"></script> 
+
+<script>
+//詳細表示ページ用の設定
+const keylink = "key";	//リンクのkeyとする変数
+const detail_html = "details.html"; //詳細表示用のHTMLファイル
+
+window.addEventListener('load', async () => {
+	const sendButton = document.getElementById('send');
+
+	//検索実行ボタンの処理
+	sendButton.addEventListener('click', async () => {
+        makeWikidataQuery();
+	}, false);
+}, false);
+
+//Wikidata ID の検索を実行する
+async function makeWikidataQuery(){
+    const resultArea = document.getElementById('result_div');
+	const textLABEL = document.getElementById('LABEL').value;
+	if(textLABEL==""){
+		alert("検索キーワードを入力してください");
+		return;
+	}
+	const endpoint ="https://www.wikidata.org/w/api.php";
+    const options =document.getElementById('query_area').value.replace('####',textLABEL);
+	document.getElementById('query_area2').value = options;
+
+    document.getElementById('result_box').style.display="flex";
+    showSearchIng(resultArea);
+
+    const resultData = await sendWdQuery(endpoint,options);
+    document.getElementById('resjson_area').value = JSON.stringify(resultData,null,'  ');  
+ 
+	showWdResultWithLink(resultData,resultArea); //詳細表示との連携用
+}
+
+</script>
+</head>
+
+<body>
+<header id="head" >
+	<h1>Wikidataを用いた検索システム</h1>
+</header>
+
+<!-- 検索条件設定の領域 -->
+<div id="menu" class="container">
+	<div style="margin-top:4px;">
+		<!-- 検索条件を設定するには下記のコメントを外す  -->
+		 <b>Wikibase APIを用いた検索</b>:<br>
+		 	<input id="LABEL" type="text" value="" autocomplete="off" size="40"/>
+			<input type="button" id="send" value="検索の実行" style="margin-top:8px; "><br>
+		<hr> 
+		<!-- 下記の「クエリの表示・非表示」ボタンは，必要がなければコメントアウトしてもよい  -->
+		<input type="button" id="dis_b" value="クエリの表示"
+			onclick="document.getElementById('query').style.display = 'block';
+			document.getElementById('dis_b').style.display = 'none';
+			document.getElementById('none_b').style.display = 'block';">
+		<input type="button" id="none_b"  value="クエリの非表示" style="display:none"
+			onclick="document.getElementById('query').style.display = 'none';
+			document.getElementById('dis_b').style.display = 'block';
+			document.getElementById('none_b').style.display = 'none';">
+	</div>
+
+<div id="query" style="display:none">
+置き換え前のクエリ：<br>
+<!-- 一覧検索用のクエリ-->
+<textarea id="query_area" class="t_area" rows="2">
+?action=wbsearchentities&search=####&language=en&limit=50&format=json
+</textarea>
+<br>
+置き換え後のクエリ：<br>
+<textarea id="query_area2" class="t_area" rows="2" >
+</textarea>
+<br>
+クエリ実行結果の戻り値(JSON形式）：<br>
+<textarea id="resjson_area"  class="t_area" rows="10" >
+</textarea>
+</div>
+</div>
+
+<!-- 結果表示用の領域 -->
+<div id="result_box" style=" display: none;  ">
+	<div id="result_div"  class="container" style="flex: 1;"></div>
+	<!-- 詳細表示画面の領域 -->
+	<div id="details_div" >
+		<iframe src="" name="details"style="width: 600px; height: 80hv;"></iframe>
+	</div>
+</div>
+<hr>
+</body>
+</html>

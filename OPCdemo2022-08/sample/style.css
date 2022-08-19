@@ -1,0 +1,206 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+header > h1 {
+    margin: 0;
+    background-color: #99cc00;
+}
+
+.container {
+    margin: 1em;
+    padding: 0;
+    text-align: left;
+}
+
+.t_area {
+    overflow:auto;
+    width: 100%;
+    /* height: 15vh; */
+    border: solid 1px #ccc;
+}
+
+.result_div {
+  /* width: 300px; */
+  margin: 1em;
+  padding: 0;
+  height: 80vh;
+  /* border: solid 1px; */
+  overflow: auto;
+  text-align: left;
+}
+
+.cond {
+  padding: 0;
+  /* display: block;  */
+}
+
+table {
+	/* width: 100%; */
+	table-layout: fixed;
+	word-break: break-all;
+	word-wrap: break-all;
+	}
+
+ iframe {
+	border: none;
+	height: 100%;
+	width: 100%;
+}
+
+/* 表の設定
+　　https://haniwaman.com/parts/post-4069 より  */
+.result-table {
+  border-collapse: collapse;
+  border: 1px solid rgba(0,0,0,.1);
+  table-layout: fixed;
+  width: 100%;
+}
+.result-table th, .result-table td {
+  border: 1px solid rgba(0,0,0,.1);
+  padding: .6em;
+  text-align: center;
+  background: #fff;
+}
+.result-table th {
+  background: #E0FFFF;
+  color: black;
+  /* font-weight: bold; */
+}
+.result-table th:first-child {
+  width: 120px;
+}
+
+
+
+#loading {
+display: table;
+width: 100%;
+height: 100%;
+position: fixed;
+top: 0;
+left: 0;
+background-color: #fff;
+opacity: 0.8;
+ }
+
+ #loading .loadingMsg {
+display: table-cell;
+text-align: center;
+vertical-align: middle;
+padding-top: 140px;
+background: url("image/load-earth.gif") center center no-repeat;
+ }
+
+/* Loading 画像用（https://www.benricho.org/loading_images/withCSS_04/02.html より） */
+.flower-spinner,  .flower-spinner * {
+    box-sizing: border-box;
+  }
+
+  .flower-spinner {
+    height: 70px;
+    width: 70px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .flower-spinner .dots-container {
+    height: calc(70px / 7);
+    width: calc(70px / 7);
+  }
+
+  .flower-spinner .smaller-dot {
+    background: orange;
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    animation: flower-spinner-smaller-dot-animation 2.5s 0s infinite both;
+
+  }
+
+  .flower-spinner .bigger-dot {
+    background: #ff1d5e;
+    height: 100%;
+    width: 100%;
+    padding: 10%;
+    border-radius: 50%;
+    animation: flower-spinner-bigger-dot-animation 2.5s 0s infinite both;
+  }
+
+  @keyframes flower-spinner-bigger-dot-animation {
+    0%, 100% {
+      box-shadow: rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px;
+    }
+
+    50% {
+      transform: rotate(180deg);
+    }
+
+    25%, 75% {
+      box-shadow: rgb(255, 29, 94) 26px 0px 0px,
+      rgb(255, 29, 94) -26px 0px 0px,
+      rgb(255, 29, 94) 0px 26px 0px,
+      rgb(255, 29, 94) 0px -26px 0px,
+      rgb(255, 29, 94) 19px -19px 0px,
+      rgb(255, 29, 94) 19px 19px 0px,
+      rgb(255, 29, 94) -19px -19px 0px,
+      rgb(255, 29, 94) -19px 19px 0px;
+    }
+
+    100% {
+      transform: rotate(360deg);
+      box-shadow: rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px;
+    }
+  }
+
+  @keyframes flower-spinner-smaller-dot-animation {
+    0%, 100% {
+      box-shadow: rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px;
+    }
+
+    25%, 75% {
+      box-shadow: rgb(255, 29, 94) 14px 0px 0px,
+      rgb(255, 29, 94) -14px 0px 0px,
+      rgb(255, 29, 94) 0px 14px 0px,
+      rgb(255, 29, 94) 0px -14px 0px,
+      rgb(255, 29, 94) 10px -10px 0px,
+      rgb(255, 29, 94) 10px 10px 0px,
+      rgb(255, 29, 94) -10px -10px 0px,
+      rgb(255, 29, 94) -10px 10px 0px;
+    }
+
+    100% {
+      box-shadow: rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px,
+      rgb(255, 29, 94) 0px 0px 0px;
+    }
+  }

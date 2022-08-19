@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Wikidataを用いた検索システム【詳細表示】</title>
+
+<link rel="stylesheet" href="style.css">
+<!-- KG検索用のライブラリ読み込み -->
+<script src="KGSearch.js"></script> 
+
+<script>
+//詳細表示ページ用の設定
+const keylink = "item";	//リンクのkeyとする変数
+const detail_html = "details.html"; //詳細表示用のHTMLファイル
+
+//表示するプロパティの順番(必要に応じて変更する)
+//const props = [] ;
+const props = ["wdt:P131","wdt:P112","wdt:P18","wdt:P571"];  //記載例
+
+window.addEventListener('load', async () => {
+	const sendButton = document.getElementById('send');
+
+	//検索実行ボタンの処理
+	sendButton.addEventListener('click', async () => {
+        makeQuery();
+	}, false);
+
+    //パラメータ(?key=XXXX)を使ったアクセスの処理
+    var param = location.search;
+    if(param!=""){
+		document.getElementById('QID').value = decodeURI(param.replace("?key=",""));
+        document.getElementById('head').style.display = 'none';
+        document.getElementById('menu').style.display = 'none';
+		makeQuery();
+    }
+
+}, false);
+
+//検索に用いるSPARQLクエリを生成し，実行する
+async function makeQuery(){
+    const endpoint = "https://query.wikidata.org/sparql";
+    const resultArea = document.getElementById('result_div');
+	let query = document.getElementById('query_area').value;
+
+	const textQID = document.getElementById('QID').value;
+    if(textQID!=""){
+		if(textQID.startsWith("wd:Q")){
+			query = query.replace( '?QID', textQID );
+		}
+		else{
+			let qid = await getWdIDse(textQID); //getWdIDも使用可能
+			query = query.replace( '?QID', 'wd:'+qid );
+		}
+        document.getElementById('query_area2').value=query; 
+    }
+    else{
+        alert("「QID」または「ラベル」を入力して下さい");
+    }
+
+    //SPARQLクエリの実行
+	resultArea.innerHTML="";
+	document.getElementById('result_box').style.display="flex";
+	showSearchIng(resultArea);
+    
+	const resultData = await sendSPARQLQuery(endpoint, query);
+    
+	document.getElementById('resjson_area').value = JSON.stringify(resultData,null,'  ');
+	
+    showResultDetails(resultData,resultArea,props); //クエリ結果の表示【詳細表示用】
+}
+</script>
+</head>
+
+<body>
+<header id="head" >
+	<h1>Wikidataを用いた検索システム【詳細表示】</h1>
+</header>
+
+<!-- 検索条件設定の領域 -->
+<div id="menu" class="container">
+	<div style="margin-top:4px;">
+		<!-- 検索条件を設定するには下記のコメントを外す  -->
+		Wikidata ID（例：wd:Q7105556），または，ラベルで検索<br>
+		 	<input id="QID" type="text" value="wd:Q7105556" autocomplete="off" size="20"/>
+			<input type="button" id="send" value="検索の実行" style="margin-top:8px; "><br>
+		<hr> 
+		<!-- 下記の「クエリの表示・非表示」ボタンは，必要がなければコメントアウトしてもよい  -->
+		<input type="button" id="dis_b" value="クエリの表示"
+			onclick="document.getElementById('query').style.display = 'block';
+			document.getElementById('dis_b').style.display = 'none';
+			document.getElementById('none_b').style.display = 'block';">
+		<input type="button" id="none_b"  value="クエリの非表示" style="display:none"
+			onclick="document.getElementById('query').style.display = 'none';
+			document.getElementById('dis_b').style.display = 'block';
+			document.getElementById('none_b').style.display = 'none';">
+	</div>
+
+	<div id="query" style="display:none">
+		<b>置き換え前のクエリ</b>：<br>
+<!--注：こちらのクエリは【修正しない！】-->
+<textarea id="query_area" class="t_area" rows="10">
+select DISTINCT ?item ?itemLabel ?o ?oLabel ?p ?prop ?propLabel
+where{
+    BIND(?QID AS ?item)
+    ?item ?p ?o.
+    FILTER(
+    	(isLiteral(?o)&&((lang(?o)="ja")||(lang(?o)="")))
+    		||(!isLiteral(?o)
+	    &&(!contains(str(?o),"http://www.wikidata.org/entity/statement/"))
+		)
+    )
+	OPTIONAL{?prop wikibase:directClaim ?p.}
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "ja,en". }
+}		
+</textarea>	
+	<br>
+		<b>置き換え後のクエリ</b>：<br>
+		<textarea id="query_area2" class="t_area" rows="10" ></textarea><br>
+		<b>クエリ実行結果の戻り値(JSON形式）</b>：<br>
+		<textarea id="resjson_area"  class="t_area" rows="10" ></textarea>
+	</div>
+</div>
+<!-- 結果表示用の領域 -->
+<div id="result_box" style=" display: none;  ">
+	<div id="result_div"  class="container" style="flex: 1;"></div>
+</div>
+<hr>
+</body>
+</html>
