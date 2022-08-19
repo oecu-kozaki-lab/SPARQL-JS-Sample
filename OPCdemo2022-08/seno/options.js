@@ -10,7 +10,7 @@ let search_cond =
     },
     {
       "id": "cond2",
-      "ctext": "所属チーム",
+      "ctext": "所属チーム(例:パリ・サンジェルマン)",
       "cond": "wdt:P54",
       "val": "",
       "type": "getID",

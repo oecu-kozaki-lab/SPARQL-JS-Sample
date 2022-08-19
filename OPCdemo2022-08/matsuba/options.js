@@ -1,8 +1,3 @@
-/* 
- * 詳細検索用の条件設定
- * 　・"id"の値が重複しないように注意
- *   ・データの数は必要に応じて増減してよい． 
- */
 let search_cond = 
 [
   {
@@ -15,7 +10,7 @@ let search_cond =
   },
   {
     "id": "cond2",
-    "ctext": "所有者",
+    "ctext": "所有者（例：西日本旅客鉄道）",
     "cond": "wdt:P127/rdfs:label",
     "val": "",
     "type": "STR-ja",

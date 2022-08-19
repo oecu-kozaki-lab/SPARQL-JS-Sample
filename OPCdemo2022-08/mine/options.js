@@ -10,7 +10,7 @@ let search_cond =
   },
   {
     "id": "cond2",
-    "ctext": "隣の星座",
+    "ctext": "隣となる星座　例:オリオン座(空欄検索からの絞り込みに利用ください)",
     "cond": "wdt:P47",
     "val": "",
     "type": "getID",

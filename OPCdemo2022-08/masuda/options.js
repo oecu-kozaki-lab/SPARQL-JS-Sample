@@ -15,7 +15,7 @@ let search_cond =
   },
   {
     "id": "cond2",
-    "ctext": "国籍",
+    "ctext": "国籍(例：日本国、アメリカ)",
     "cond": "wdt:P27",
     "val": "日本国",
     "type": "getID",

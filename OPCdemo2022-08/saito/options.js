@@ -8,41 +8,41 @@ let search_cond =
     {
       "id": "cond1",
       "ctext": "分類＝神社",
-      "cond": "wdt:P31",
+      "cond": "wdt:P31/wdt:P279*",
       "val": "wd:Q845945",
       "type": "ID",
       "const": true
     },
     {
       "id": "cond2",
-      "ctext": "国",
+      "ctext": "国（例：日本は「日本国」）",
       "cond": "wdt:P17",
-      "val": "日本国",
+      "val": "",
       "type": "getID",
       "const": false
     },
     {
       "id": "cond3",
-      "ctext": "",
-      "cond": "",
+      "ctext": "設立年（XXXX年以降，例：1000）",
+      "cond": "FILTER(?opt4 >= \"####-01-01T00:00:00Z\"^^xsd:dateTime)",
       "val": "",
       "type": "REPLACE",
       "const": false
     },
     {
       "id": "cond4",
-      "ctext": "",
-      "cond": "",
+      "ctext": "設立年（XXXX年以前，例：1000）",
+      "cond": "FILTER(?opt4 <= \"####-12-31T23:59:59Z\"^^xsd:dateTime)",
       "val": "",
       "type": "REPLACE",
       "const": false
     },
     {
       "id": "cond5",
-      "ctext": "",
-      "cond": "",
+      "ctext": "所在地（例：大阪府、大阪市など）",
+      "cond": "wdt:P131/rdfs:label|wdt:P131/wdt:P131/rdfs:label",
       "val": "",
-      "type": "ID",
+      "type": "STR-ja",
       "const": false
     }
   ];
@@ -57,9 +57,9 @@ let search_prop =
     },
     {
       "id": "opt2",
-      "prop": "wdt:P825",
-      "pname": "献呈先",
-      "optional": false
+      "prop": "wdt:P18",
+      "pname": "画像",
+      "optional": true
     },
     {
       "id": "opt3",
@@ -75,8 +75,8 @@ let search_prop =
     },
     {
       "id": "opt5",
-      "prop": "wdt:P18",
-      "pname": "画像",
-      "optional": true
+      "prop": "",
+      "pname": "",
+      "optional": false
     }
   ];

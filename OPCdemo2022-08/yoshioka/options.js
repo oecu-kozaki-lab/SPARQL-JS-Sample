@@ -16,7 +16,7 @@ let search_cond =
   },
   {
     "id": "cond2",
-    "ctext": "創設者",
+    "ctext": "創設者(例:毛利輝元)",
     "cond": "wdt:P112/rdfs:label",
     "val": "",
     "type": "STR-ja",
@@ -24,7 +24,7 @@ let search_cond =
   },
   {
     "id": "cond3",
-    "ctext": "成立日",
+    "ctext": "成立日(XXXX年以降,例:1400)",
     "cond": "FILTER(?opt4 >= \"####-01-01T00:00:00Z\"^^xsd:dateTime)",
     "val": "",
     "type": "REPLACE",

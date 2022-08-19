@@ -15,7 +15,7 @@ let search_cond =
   },
   {
     "id": "cond2",
-    "ctext": "本国",
+    "ctext": "本国（例：アメリカ、イギリス）",
     "cond": "wdt:P495",
     "val": "",
     "type": "getID",
