@@ -10,10 +10,10 @@ let search_cond =
   },
   {
     "id": "cond2",
-    "ctext": "所有者（例：西日本旅客鉄道）",
-    "cond": "wdt:P127/rdfs:label",
+    "ctext": "所有者（例：西日本旅客鉄道，南海電鉄）",
+    "cond": "wdt:P127",
     "val": "",
-    "type": "STR-ja",
+    "type": "getID",
     "const": false
   },
   {

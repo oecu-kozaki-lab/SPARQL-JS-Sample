@@ -147,7 +147,7 @@ async function getWdIDsByMEse(label,limit){
 /*
  * クエリ結果の表示【テーブル表示用】
  */
-function showResult(resultData,resultArea){
+function showResultORG(resultData,resultArea){
 	//クエリ結果のJSONデータを「ヘッダ部(keys)」と「値(data)」に分けて処理する
 	const keys = resultData.head.vars;
 	const data = resultData.results.bindings;
@@ -208,7 +208,7 @@ function showResult(resultData,resultArea){
 /*
  * クエリ結果の表示【テーブル表示用】
  */
-function showResultNEW(resultData,resultArea){
+function showResult(resultData,resultArea){
 	//クエリ結果のJSONデータを「ヘッダ部(keys)」と「値(data)」に分けて処理する
 	const keys = resultData.head.vars;
 	const data = resultData.results.bindings;
@@ -244,11 +244,16 @@ function showResultNEW(resultData,resultArea){
 						rownum[i][0] = 0;
 					}
 					if(rownum[i][0]==0){
+						console.log(data[i][keys[j]].value+"rownum[i][j] = 0");
 						rownum[i][j] = 0;
-						for(let k=i;k>0;k--){
+						for(let k=i-1;k>=0;k--){
 							if(rownum[k][j]>0){
 								rownum[k][j]++;
+								console.log(data[i][keys[j]].value+'rownum[k][j]='+rownum[k][j]+' '+"rownum[k][j]++");
 								break;
+							}
+							else{
+								console.log(data[i][keys[j]].value+'rownum[k][j]='+rownum[k][j]+' '+"rownum[k][j]=<0");
 							}
 						}
 					}	
@@ -305,6 +310,8 @@ function showResultNEW(resultData,resultArea){
 		mesText+="</tr>";
 	}
 	resultArea.innerHTML = mesText+'</table>';
+
+	console.log(mesText);
 
 	//「IDsの取得数」か「SPARQLの結果の数」がLIMITの50になった時は「続きを検索」ON
 	if(data.length == 50 || contQueryIds){

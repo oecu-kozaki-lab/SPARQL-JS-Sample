@@ -10,18 +10,18 @@ let search_cond =
   },
   {
     "id": "cond2",
-    "ctext": "",
-    "cond": "",
+    "ctext": "著者",
+    "cond": "wdt:P50",
     "val": "",
-    "type": "ID",
+    "type": "getID",
     "const": false
   },
   {
     "id": "cond3",
-    "ctext": "",
-    "cond": "",
+    "ctext": "発行元",
+    "cond": "wdt:P123",
     "val": "",
-    "type": "ID",
+    "type": "getID",
     "const": false
   },
   {

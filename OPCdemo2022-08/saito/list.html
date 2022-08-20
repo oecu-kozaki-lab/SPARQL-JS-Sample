@@ -7,8 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Wikidataを用いた検索システム</title>
 
-    <link rel="stylesheet" href="style.css">
-    <script src="KGSearch.js"></script> <!-- KG検索用のライブラリ読み込み -->
+    <link rel="stylesheet" href="..//KGS-style.css">
+    <script src="..//KGSearch.js"></script>     <!-- KG検索用のライブラリ読み込み -->
     <script src="options.js"></script> <!-- KG検索設定ファイルの読み込み -->
 
     <script>
@@ -66,7 +66,7 @@
                     <label><input type="radio" id="LabelAmbi" name="labelType" value="ambi" checked>あいまい検索</label>
                     <!--「部分一致」はSPARQLクエリを利用するため処理が重く、
                     「Wikidata全体」を対象とするとタイムアウトとなるので使用しない。（検索対象を絞ると利用可） -->
-                    <!-- <label><input type="radio" id="LabelPart" name="labelType" value="part">部分一致</label> -->
+                    <label><input type="radio" id="LabelPart" name="labelType" value="part">部分一致</label>
                 </div>
                 <b>検索条件</b>:<br>
                 <div id="search_cond_div"></div>
@@ -85,7 +85,7 @@
 select DISTINCT ?item ?itemLabel
 where{
     SERVICE wikibase:label { bd:serviceParam wikibase:language "ja,en". }
-}
+}ORDER BY ?itemLabel
 LIMIT 50		
 </textarea>
             <br>
