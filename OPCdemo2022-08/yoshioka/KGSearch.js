@@ -147,7 +147,7 @@ async function getWdIDsByMEse(label,limit){
 /*
  * クエリ結果の表示【テーブル表示用】
  */
-function showResultORG(resultData,resultArea){
+function showResult(resultData,resultArea){
 	//クエリ結果のJSONデータを「ヘッダ部(keys)」と「値(data)」に分けて処理する
 	const keys = resultData.head.vars;
 	const data = resultData.results.bindings;
@@ -208,7 +208,7 @@ function showResultORG(resultData,resultArea){
 /*
  * クエリ結果の表示【テーブル表示用】
  */
-function showResult(resultData,resultArea){
+function showResultNEW(resultData,resultArea){
 	//クエリ結果のJSONデータを「ヘッダ部(keys)」と「値(data)」に分けて処理する
 	const keys = resultData.head.vars;
 	const data = resultData.results.bindings;
