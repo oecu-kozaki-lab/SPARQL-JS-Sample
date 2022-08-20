@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+	<script src="parseText.js" defer></script>
+	<script src="sparql6.js" defer></script>
+	
+<script>
+/* ------------------------------
+ Loading イメージ表示関数
+ ------------------------------ */
+function dispLoading(msg){
+ // 引数なし（メッセージなし）を許容
+ if( msg == undefined ){
+ msg = "";
+ }
+ // 画面表示メッセージ
+ var dispMsg = "<div class='loadingMsg'>" + msg + "</div>";
+ // ローディング画像が表示されていない場合のみ出力
+ if(document.getElementById("loading") == null){
+ document.body.insertAdjacentHTML('afterbegin',"<div id='loading'>" + dispMsg + "</div>");
+ }
+}
+ 
+/* ------------------------------
+ Loading イメージ削除関数
+ ------------------------------ */
+function removeLoading(){
+ document.getElementById("loading").remove();
+}
+</script>
+<style>
+	 #loading {
+	 display: table;
+	 width: 100%;
+	 height: 100%;
+	 position: fixed;
+	 top: 0;
+	 left: 0;
+	 background-color: #fff;
+	 opacity: 0.8;
+	}
+	 
+	#loading .loadingMsg {
+	 display: table-cell;
+	 text-align: center;
+	 vertical-align: middle;
+	 padding-top: 140px;
+	 background: url("image/load-earth.gif") center center no-repeat;
+	}
+</style>
+	
+	
+	<link rel="stylesheet" href="style.css">
+	<title>自然言語による質問文への応答</title>
+</head>
+
+<body>
+	<header>
+		<h1>自然言語による質問文への応答</h1>
+	</header>
+
+	<div class="container">
+	<div style="margin-top:4px;  font-size: 1.5rem;">
+			<label>質問文：<input type="text" id="queryText" size="80" value="となりのトトロの監督は？" style=" font-size: 1.5rem;"></label>
+			<br>
+			<hr>
+            
+		<div class="center-item" >
+			<input type="button" value="クエリの表示" onclick="document.getElementById('query_area').style.display = 'block';">
+		<input type="button" value="非表示" onclick="document.getElementById('query_area').style.display = 'none';">
+			<textarea style="display:none" id="query_area" cols="60" rows="10">
+select DISTINCT ?o ?oLabel
+{ 
+  #VALUES#
+  ?s ?p ?o.
+  ?prop wikibase:directClaim  ?p . 
+  ?prop rdfs:label|skos:altLabel "#PROP#"@ja.
+
+SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],ja,en". }
+}
+</textarea>
+		</div>
+		<div class="center-item">
+			<button id="send">質問する</button><br>
+			「〇〇の□□は？」という形の文で質問して下さい．<br>
+		</div>
+	</div>
+
+	<!-- 結果ペイン -->
+	<div id="result_div" class="container"></div>
+	<hr>
+	<div class="container">
+	<h3>質問文の例</h3>
+	ドラゴンボールの登場人物は？<br>
+	天気の子の声優は？<br>
+	大阪電気通信大学の所在地は<br>
+	寝屋川市の人口は<br>
+	ドラゴンクエストのプラットフォームは？<br>
+	スプラトゥーンのプロデューサーは？<br>
+	オオクワガタの画像は？<br>
+	</div>
+	※うまく回答が出ない場合は，検索に使う「単語」を<a href="https://www.wikidata.org/">Wikidata</a>から検索してください．
+<hr>
+<a href="../OPCdemo2022-08/index.html">[ジャンル別質問]</a>　
+<a href="https://www.osakac.ac.jp/labs/kozaki/KG.html">[知識グラフを利用した質問応答システム]</a>
+</body>
+
+</html>
