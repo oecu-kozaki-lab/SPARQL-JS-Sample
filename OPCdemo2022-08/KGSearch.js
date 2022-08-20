@@ -816,6 +816,18 @@ function setButtons(){
 		//makeWikidataQuery();
 	}, false);
 
+    // Enterキー押下時、送信処理が実行する
+    window.document.onkeydown = function(event){
+        if (event.key === 'Enter') {
+            offset = 0;  
+			contQueryIds = false;
+			contQuery = false;
+			document.getElementById("result_div").innerHTML="";
+			contButton.style.display="none";
+			makeQuery();
+        }
+    }
+
     //詳細検索表示ボタンの処理
 	showQueryCondButton.addEventListener('click', () => {
         document.getElementById('QueryCond_div').style.display = 'block';
