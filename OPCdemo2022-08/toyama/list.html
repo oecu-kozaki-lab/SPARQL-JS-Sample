@@ -85,7 +85,7 @@ async function makeQuery(){
 select DISTINCT ?item ?itemLabel
 where{
     SERVICE wikibase:label { bd:serviceParam wikibase:language "ja,en". }
-}
+}ORDER BY ?itemLabel
 LIMIT 50		
 </textarea>
         <br>
