@@ -104,11 +104,12 @@ textArea.hidden;
 			
 			//情報源の表示
 			if(data[0] != undefined){
-				if(data[0]['s']!=null){
-					str = data[0]['s'].value;
+				if(data[0]['o']!=null){
+					//str = data[0]['s'].value;
 					var a = document.createElement('a');
-					a.textContent = "情報源："+data[0]['sLabel'].value+"のWikidata（"+str+"）";
-					a.href= str;
+					a.textContent = "情報源：" + textINPUT+"のWikidataを検索"; ;//+data[0]['sLabel'].value+"のWikidata（"+str+"）";
+					a.href= 'https://oecu-kozaki-lab.github.io/SPARQL-JS-Sample/OPCdemo2022-08/sample/details.html?key='
+							+ textINPUT;//str;
 					a.target= "_blank";
 					mes.appendChild( a );
 				}
